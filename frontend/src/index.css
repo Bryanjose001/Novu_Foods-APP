@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@layer base {
+  body {
+    @apply bg-grey-full-light text-blackc font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary hover:bg-hover active:bg-active text-white font-bold py-3 px-6 rounded-xl transition-all duration-200 shadow-md active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply bg-white hover:bg-grey-light text-blackc font-bold py-3 px-6 rounded-xl border border-grey-light-dark transition-all duration-200 active:scale-95;
+  }
+
+  .btn-icon {
+    @apply p-2 rounded-full hover:bg-grey-light transition-colors active:scale-95;
+  }
+
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-grey-light-dark overflow-hidden;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 bg-grey-light border-none rounded-xl focus:ring-2 focus:ring-primary/50 outline-none transition-all;
+  }
+
+  .search-bar {
+    @apply flex items-center bg-white rounded-full px-4 py-2 shadow-sm border border-grey-light-dark;
+  }
+
+  .bottom-nav-item {
+    @apply flex flex-col items-center justify-center space-y-1 text-gray-400 hover:text-white transition-colors;
+  }
+
+  .bottom-nav-item.active {
+    @apply text-white;
+  }
+
+  .category-card {
+    @apply flex flex-col items-center justify-center p-3 bg-white rounded-2xl shadow-sm border border-grey-light-dark hover:shadow-md transition-all active:scale-95 cursor-pointer;
+  }
+
+  .gradient-primary {
+    background: linear-gradient(135deg, #789070 0%, #A7B7A2 100%);
+  }
+}
+
+/* Hide scrollbar for horizontal scrolling */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

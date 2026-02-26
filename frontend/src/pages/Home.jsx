@@ -10,7 +10,7 @@ const Home = () => {
 
   const mainSections = [
     {
-      id: 1, name: 'Restaurants', icon: '🍔', slug: 'restaurants',
+      id: 1, name: 'Restaurants', slug: 'restaurants',
       description: 'Order from your favorite places',
       image: '/images/category-restaurants.png',
       fallbackImage: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop&q=80',
@@ -18,7 +18,7 @@ const Home = () => {
       accentColor: 'bg-orange-500',
     },
     {
-      id: 2, name: 'Groceries', icon: '🛒', slug: 'groceries',
+      id: 2, name: 'Groceries',  slug: 'groceries',
       description: 'Fresh produce & essentials',
       image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=400&fit=crop&q=80',
       fallbackImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=400&fit=crop&q=80',
@@ -26,7 +26,7 @@ const Home = () => {
       accentColor: 'bg-green-500',
     },
     {
-      id: 3, name: 'Pharmacy', icon: '💊', slug: 'pharmacy',
+      id: 3, name: 'Pharmacy', slug: 'pharmacy',
       description: 'Health, beauty & wellness',
       image: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&h=400&fit=crop&q=80',
       fallbackImage: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&h=400&fit=crop&q=80',
@@ -43,23 +43,22 @@ const Home = () => {
   ];
 
   const cuisineCategories = [
-    { id: 1, name: 'American', emoji: '🍟' },
-    { id: 2, name: 'Burgers', emoji: '🍔' },
-    { id: 3, name: 'Breakfast', emoji: '🥞' },
-    { id: 4, name: 'Pizza', emoji: '🍕' },
-    { id: 5, name: 'Sushi', emoji: '🍣' },
-    { id: 6, name: 'Mexican', emoji: '🌮' },
-    { id: 7, name: 'Chinese', emoji: '🥡' },
-    { id: 8, name: 'Indian', emoji: '🍛' },
+    { id: 1, name: 'American', image: '/cuisings/French-Fries.png' },
+    { id: 2, name: 'Burgers', image: '/cuisings/Burgers.png' },
+    { id: 3, name: 'Breakfast', image: '/cuisings/Breakfask.jpg' },
+    { id: 4, name: 'Pizza', image: '/cuisings/pizza.webp' },
+    { id: 5, name: 'Sushi', image: '/cuisings/sushi.jpg' },
+    { id: 6, name: 'Mexican', image: '/cuisings/mexican.webp' },
+    { id: 7, name: 'Chinese', image: '/cuisings/chinese.png' },
   ];
 
   const superCategories = [
-    { id: 1, name: 'Fresh Fruits & Vegetable', emoji: '🥬' },
-    { id: 2, name: 'Cooking Oil & Ghee', emoji: '🫒' },
-    { id: 3, name: 'Meat & Fish', emoji: '🥩' },
-    { id: 4, name: 'Bakery & Snacks', emoji: '🍞' },
-    { id: 5, name: 'Dairy & Eggs', emoji: '🥛' },
-    { id: 6, name: 'Beverages', emoji: '🥤' },
+    { id: 1, name: 'Fresh Fruits & Vegetable' },
+    { id: 2, name: 'Cooking Oil & Ghee' },
+    { id: 3, name: 'Meat & Fish' },
+    { id: 4, name: 'Bakery & Snacks' },
+    { id: 5, name: 'Dairy & Eggs' },
+    { id: 6, name: 'Beverages' },
   ];
 
   useEffect(() => {
@@ -79,11 +78,11 @@ const Home = () => {
 
   return (
     <div className="bg-grey-full-light min-h-screen pb-20 md:pb-8">
-      
+
       {showBanner && (
         <div className="mx-4 mt-4 mb-2 relative">
           <div className="gradient-primary rounded-2xl p-6 md:p-8 text-white relative overflow-hidden min-h-[160px]">
-            
+
             <div className="absolute right-0 top-0 bottom-0 w-1/2 md:w-2/5">
               <img
                 src="/images/banner-food.png"
@@ -134,17 +133,15 @@ const Home = () => {
 
       <div className="px-4 mb-6">
         <div className="flex space-x-5 overflow-x-auto no-scrollbar py-2">
-          {cuisineCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              to={`/category/restaurants`}
-              className="flex flex-col items-center space-y-2 flex-shrink-0 group"
-            >
-              <div className="w-14 h-14 md:w-16 md:h-16 bg-grey-light rounded-full flex items-center justify-center text-2xl md:text-3xl group-hover:bg-primary-light/30 transition-colors group-active:scale-90">
-                {cat.emoji}
-              </div>
-              <span className="text-xs font-medium text-gray-600 text-center whitespace-nowrap">{cat.name}</span>
-            </Link>
+          {cuisineCategories.map((c) => (
+            <div key={c.id} className="flex items-center gap-2">
+              <img
+                src={c.image}
+                alt={c.name}
+                className="w-6 h-6 object-contain"
+              />
+              <span>{c.name}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -188,7 +185,7 @@ const Home = () => {
               className="group"
             >
               <div className="relative rounded-2xl overflow-hidden aspect-square hover:shadow-lg transition-all active:scale-95">
-                
+
                 <img
                   src={section.image}
                   alt={section.name}
@@ -197,15 +194,15 @@ const Home = () => {
                     e.target.src = section.fallbackImage;
                   }}
                 />
-                
+
                 <div className={`absolute inset-0 bg-gradient-to-t ${section.overlayColor}`}></div>
-                
+
                 <div className="relative z-10 h-full flex flex-col items-center justify-end p-3 pb-4 text-white text-center">
                   <span className="text-2xl md:text-3xl mb-1 drop-shadow-lg group-hover:scale-110 transition-transform">{section.icon}</span>
                   <span className="font-bold text-sm md:text-base leading-tight drop-shadow-lg">{section.name}</span>
                   <span className="text-[9px] md:text-xs opacity-90 mt-0.5 hidden md:block drop-shadow-md">{section.description}</span>
                 </div>
-                
+
                 <div className={`absolute top-2 right-2 w-2.5 h-2.5 ${section.accentColor} rounded-full shadow-sm`}></div>
               </div>
             </Link>

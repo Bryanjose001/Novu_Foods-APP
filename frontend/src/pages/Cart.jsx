@@ -21,7 +21,7 @@ const Cart = () => {
   if (cart.length === 0) {
     return (
       <div className="flex flex-col justify-center items-center min-h-[60vh] p-4">
-        <div className="text-6xl mb-4 bg-grey-light p-6 rounded-full">🛒</div>
+        <div className="text-6xl mb-4 bg-grey-light p-6 rounded-full"></div>
         <h2 className="text-2xl font-bold mb-2 text-blackc">Your cart is empty</h2>
         <p className="text-gray-500 mb-6 text-center">Add some delicious food to get started!</p>
         <Link to="/" className="btn-primary">

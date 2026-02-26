@@ -44,7 +44,7 @@ const Navbar = () => {
           <Link to="/category/groceries" className="text-white/80 font-medium hover:text-white transition-colors text-sm">Groceries</Link>
           <Link to="/category/pharmacy" className="text-white/80 font-medium hover:text-white transition-colors text-sm">Pharmacy</Link>
           <Link to="/admin" className="text-white/80 font-medium hover:text-white transition-colors text-sm flex items-center gap-1">
-            <span>⚙️</span> Admin
+            <span></span> Admin
           </Link>
         </div>
 

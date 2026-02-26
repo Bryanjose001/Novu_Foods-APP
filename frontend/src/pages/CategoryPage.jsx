@@ -11,50 +11,47 @@ const CategoryPage = () => {
     const categoryConfig = {
         'restaurants': {
             title: 'Restaurants',
-            icon: '🍔',
-            bannerImage: '/images/restaurants-hero.png',
+            bannerImage: '/images/category-restaurants.png',
             bannerFallback: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&h=300&fit=crop&q=80',
             subcategories: [
-                { name: 'Fast Foods', emoji: '🍟' },
-                { name: 'Breakfast', emoji: '🥞' },
-                { name: 'Pizza', emoji: '🍕' },
-                { name: 'Sushi', emoji: '🍣' },
-                { name: 'Mexican', emoji: '🌮' },
+                { name: 'Fast Foods',image: '/cuisings/French-Fries.png'},
+                { name: 'Breakfast',image: '/cuisings/French-Fries.png' },
+                { name: 'Pizza', image: '/cuisings/French-Fries.png'},
+                { name: 'Sushi', image: '/cuisings/French-Fries.png' },
+                { name: 'Mexican', image: '/cuisings/'},
             ]
         },
         'groceries': {
             title: 'Groceries',
-            icon: '🛒',
+            
             bannerImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=300&fit=crop&q=80',
             bannerFallback: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=300&fit=crop&q=80',
             subcategories: [
-                { name: 'Fresh Fruits & Vegetable', emoji: '🥬' },
-                { name: 'Cooking Oil & Ghee', emoji: '🫒' },
-                { name: 'Meat & Fish', emoji: '🥩' },
-                { name: 'Bakery & Snacks', emoji: '🍞' },
-                { name: 'Dairy & Eggs', emoji: '🥛' },
-                { name: 'Beverages', emoji: '🥤' },
-                { name: 'Meat & Fish', emoji: '🐟' },
-                { name: 'Fresh Fruits & Vegetable', emoji: '🍎' },
+                { name: 'Fresh Fruits & Vegetable' },
+                { name: 'Cooking Oil & Ghee'},
+                { name: 'Meat & Fish'},
+                { name: 'Bakery & Snacks'},
+                { name: 'Dairy & Eggs'},
+                { name: 'Beverages'},
+                { name: 'Meat & Fish' },
+                { name: 'Fresh Fruits & Vegetable' },
             ]
         },
         'pharmacy': {
             title: 'Pharmacy & Beauty',
-            icon: '💊',
             bannerImage: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&h=300&fit=crop&q=80',
             bannerFallback: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&h=300&fit=crop&q=80',
             subcategories: [
-                { name: 'Pharmacy', emoji: '💊' },
-                { name: 'CBD', emoji: '🌿' },
-                { name: 'Technologies', emoji: '⚙️' },
-                { name: 'Beauty', emoji: '💄' },
+                { name: 'Pharmacy' },
+                { name: 'CBD'},
+                { name: 'Technologies' },
+                { name: 'Beauty' },
             ]
         }
     };
 
     const config = categoryConfig[slug] || {
         title: slug ? slug.charAt(0).toUpperCase() + slug.slice(1) : 'Category',
-        icon: '📦',
         subcategories: []
     };
 
@@ -220,7 +217,7 @@ const CategoryPage = () => {
 
                         <div className="flex justify-between items-center mb-3">
                             <h2 className="text-lg font-bold text-blackc flex items-center">
-                                <span className="mr-2">🎉</span> Promotions
+                                <span className="mr-2"></span> Promotions
                             </h2>
                             <button className="text-sm font-semibold text-primary hover:text-hover transition-colors">See all</button>
                         </div>

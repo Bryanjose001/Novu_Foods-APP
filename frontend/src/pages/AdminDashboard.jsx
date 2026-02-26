@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { restaurantService, menuService, orderService, adminService } from '../services/api';
 
 const storeTypes = [
-    { key: 'all', label: 'All Stores', icon: '📋' },
-    { key: 'restaurant', label: 'Restaurants', icon: '🍔' },
-    { key: 'grocery', label: 'Groceries', icon: '🛒' },
-    { key: 'pharmacy', label: 'Pharmacy', icon: '💊' },
+    { key: 'all', label: 'All Stores'},
+    { key: 'restaurant', label: 'Restaurants' },
+    { key: 'grocery', label: 'Groceries' },
+    { key: 'pharmacy', label: 'Pharmacy' },
 ];
 
 const cuisineTypes = [
@@ -37,12 +37,14 @@ const AdminDashboard = () => {
     const [showMenuForm, setShowMenuForm] = useState(null);
     const [editingStore, setEditingStore] = useState(null);
     const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
+    const [success, setSuccess] = useState(null);
+
     const [storeForm, setStoreForm] = useState({
         name: '', cuisineType: '', ownerName: '', ownerEmail: '',
         ownerPhone: '', address: '', description: '', imageUrl: '',
         storeType: 'restaurant', deliveryFee: '3.00', deliveryTime: '30-40 min',
-    });
+    });
+
     const [menuForm, setMenuForm] = useState({
         name: '', description: '', price: '', category: '', imageUrl: '',
     });
@@ -196,7 +198,7 @@ const AdminDashboard = () => {
             <div className="min-h-screen bg-grey-full-light flex flex-col items-center justify-center p-4">
                 <div className="card w-full max-w-md p-8 text-center">
                     <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
-                        🔒
+                        
                     </div>
                     <h1 className="text-2xl font-bold text-blackc mb-2">Admin Access</h1>
                     <p className="text-gray-500 mb-6 text-sm">Please enter the admin password to view the dashboard.</p>
@@ -257,8 +259,8 @@ const AdminDashboard = () => {
                 <div className="flex items-center justify-between">
                     <div className="flex space-x-2">
                         {[
-                            { key: 'stores', label: 'Stores', icon: '🏪' },
-                            { key: 'orders', label: 'Orders', icon: '📦' },
+                            { key: 'stores', label: 'Stores' },
+                            { key: 'orders', label: 'Orders' },
                         ].map(s => (
                             <button
                                 key={s.key}
@@ -285,13 +287,13 @@ const AdminDashboard = () => {
                 
                 {success && (
                     <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-4 flex items-center justify-between shadow-sm">
-                        <span className="flex items-center space-x-2"><span>✅</span><span>{success}</span></span>
+                        <span className="flex items-center space-x-2"><span></span><span>{success}</span></span>
                         <button onClick={() => setSuccess(null)} className="text-green-400 hover:text-green-700">✕</button>
                     </div>
                 )}
                 {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 flex items-center justify-between shadow-sm">
-                        <span className="flex items-center space-x-2"><span>❌</span><span>{error}</span></span>
+                        <span className="flex items-center space-x-2"><span></span><span>{error}</span></span>
                         <button onClick={() => setError(null)} className="text-red-400 hover:text-red-700">✕</button>
                     </div>
                 )}
@@ -325,7 +327,7 @@ const AdminDashboard = () => {
                         {showAddForm && (
                             <div className="card p-5 mb-5">
                                 <h2 className="text-lg font-bold text-blackc mb-4 flex items-center space-x-2">
-                                    <span>{editingStore ? '✏️' : '🏪'}</span>
+                                    
                                     <span>{editingStore ? `Edit: ${editingStore.name}` : 'Add New Store'}</span>
                                 </h2>
                                 <form onSubmit={handleStoreSubmit} className="space-y-4">
@@ -334,9 +336,9 @@ const AdminDashboard = () => {
                                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">Store Type *</label>
                                         <div className="flex space-x-3">
                                             {[
-                                                { key: 'restaurant', label: 'Restaurant', icon: '🍔', color: 'orange' },
-                                                { key: 'grocery', label: 'Grocery', icon: '🛒', color: 'green' },
-                                                { key: 'pharmacy', label: 'Pharmacy', icon: '💊', color: 'blue' },
+                                                { key: 'restaurant', label: 'Restaurant',  color: 'orange' },
+                                                { key: 'grocery', label: 'Grocery',  color: 'green' },
+                                                { key: 'pharmacy', label: 'Pharmacy', color: 'blue' },
                                             ].map(t => (
                                                 <button
                                                     key={t.key}
@@ -432,7 +434,7 @@ const AdminDashboard = () => {
 
                                     <div className="flex space-x-3">
                                         <button type="submit" className="btn-primary flex-1 py-3">
-                                            {editingStore ? '💾 Save Changes' : '🚀 Create Store'}
+                                            {editingStore ? ' Save Changes' : ' Create Store'}
                                         </button>
                                         {editingStore && (
                                             <button type="button" onClick={() => { resetStoreForm(); setShowAddForm(false); }}
@@ -446,7 +448,7 @@ const AdminDashboard = () => {
                         {showMenuForm && (
                             <div className="card p-5 mb-5 border-2 border-primary">
                                 <h2 className="text-lg font-bold text-blackc mb-4 flex items-center space-x-2">
-                                    <span>🍽️</span>
+                                    
                                     <span>Add Menu Item to: {stores.find(s => s.id === showMenuForm)?.name}</span>
                                 </h2>
                                 <form onSubmit={handleMenuSubmit} className="space-y-4">
@@ -485,7 +487,7 @@ const AdminDashboard = () => {
                                             className="input-field" placeholder="Describe the item..." />
                                     </div>
                                     <div className="flex space-x-3">
-                                        <button type="submit" className="btn-primary flex-1 py-3">🍽️ Add Item</button>
+                                        <button type="submit" className="btn-primary flex-1 py-3"> Add Item</button>
                                         <button type="button" onClick={() => setShowMenuForm(null)}
                                             className="btn-secondary px-6">Cancel</button>
                                     </div>
@@ -509,7 +511,7 @@ const AdminDashboard = () => {
                             </div>
                         ) : filteredStores.length === 0 ? (
                             <div className="card p-8 text-center">
-                                <div className="text-5xl mb-3">🏪</div>
+                                <div className="text-5xl mb-3"></div>
                                 <h3 className="text-lg font-bold text-blackc mb-1">No stores yet</h3>
                                 <p className="text-gray-500 text-sm">Click "Add Store" to create your first store.</p>
                             </div>
@@ -540,9 +542,7 @@ const AdminDashboard = () => {
                                                                     store.store_type === 'pharmacy' ? 'bg-blue-100 text-blue-700' :
                                                                         'bg-gray-100 text-gray-700'
                                                                 }`}>
-                                                                {store.store_type === 'restaurant' ? '🍔' :
-                                                                    store.store_type === 'grocery' ? '🛒' :
-                                                                        store.store_type === 'pharmacy' ? '💊' : '📦'} {(store.store_type || 'restaurant').toUpperCase()}
+                                                                 {(store.store_type || 'restaurant').toUpperCase()}
                                                             </span>
                                                             {store.cuisine_type && (
                                                                 <span className="text-[10px] text-gray-500">{store.cuisine_type}</span>
@@ -550,17 +550,17 @@ const AdminDashboard = () => {
                                                         </div>
                                                     </div>
                                                     <div className="flex items-center space-x-1 text-sm">
-                                                        <span className="text-yellow-400">⭐</span>
+                                                        <span className="text-yellow-400"></span>
                                                         <span className="font-bold text-blackc">{store.rating || '0.0'}</span>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex items-center space-x-3 text-xs text-gray-500 mt-1.5">
-                                                    <span>📍 {store.address || 'No address'}</span>
+                                                    <span> {store.address || 'No address'}</span>
                                                 </div>
                                                 <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
-                                                    <span>💰 €{store.delivery_fee || '3.00'}</span>
-                                                    <span>🕐 {store.delivery_time || '30-40 min'}</span>
+                                                    <span> ${store.delivery_fee || '3.00'}</span>
+                                                    <span> {store.delivery_time || '30-40 min'}</span>
                                                 </div>
 
                                                 <div className="flex items-center space-x-2 mt-3">
@@ -568,25 +568,25 @@ const AdminDashboard = () => {
                                                         onClick={() => handleEditStore(store)}
                                                         className="text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
                                                     >
-                                                        ✏️ Edit
+                                                         Edit
                                                     </button>
                                                     <button
                                                         onClick={() => setShowMenuForm(store.id)}
                                                         className="text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-colors"
                                                     >
-                                                        🍽️ Add Item
+                                                         Add Item
                                                     </button>
                                                     <Link
                                                         to={`/restaurant/${store.id}`}
                                                         className="text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
                                                     >
-                                                        👁️ View
+                                                         View
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDeleteStore(store)}
                                                         className="text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors ml-auto"
                                                     >
-                                                        🗑️ Delete
+                                                         Delete
                                                     </button>
                                                 </div>
                                             </div>
@@ -601,11 +601,11 @@ const AdminDashboard = () => {
                 {activeSection === 'orders' && (
                     <>
                         <h2 className="text-lg font-bold text-blackc mb-3 flex items-center space-x-2">
-                            <span>📦</span><span>Recent Orders</span>
+                            <span></span><span>Recent Orders</span>
                         </h2>
                         {orders.length === 0 ? (
                             <div className="card p-8 text-center">
-                                <div className="text-5xl mb-3">📦</div>
+                                <div className="text-5xl mb-3"></div>
                                 <h3 className="text-lg font-bold text-blackc mb-1">No orders yet</h3>
                                 <p className="text-gray-500 text-sm">Orders will appear here once customers place them.</p>
                             </div>
@@ -628,13 +628,13 @@ const AdminDashboard = () => {
                                             </span>
                                         </div>
                                         <div className="flex items-center justify-between text-xs text-gray-500">
-                                            <span>📍 {order.delivery_address}</span>
+                                            <span> {order.delivery_address}</span>
                                             <span className="font-bold text-blackc text-sm">€{parseFloat(order.total_amount || 0).toFixed(2)}</span>
                                         </div>
                                         <div className="flex items-center space-x-2 mt-2 text-xs text-gray-400">
-                                            <span>📧 {order.customer_email || 'N/A'}</span>
+                                            <span> {order.customer_email || 'N/A'}</span>
                                             <span>•</span>
-                                            <span>🕐 {order.estimated_delivery || 'N/A'}</span>
+                                            <span> {order.estimated_delivery || 'N/A'}</span>
                                         </div>
                                     </div>
                                 ))}

@@ -47,12 +47,6 @@ Before you begin, ensure you have installed:
 
 ## Installation & Setup
 
-### 1. Clone the Repository
-```bash
-git clone <repository-url>
-cd food-delivery-app
-```
-
 ### 2. Start PostgreSQL Database
 ```bash
 docker-compose up -d

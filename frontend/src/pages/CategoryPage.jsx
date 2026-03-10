@@ -13,9 +13,11 @@ const CategoryPage = () => {
             bannerImage: '/images/category-restaurants.png',
             bannerFallback: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&h=300&fit=crop&q=80',
             subcategories: [
+                { name: 'All', image: '/cuisings/Frame%20(2).png' },
                 { name: 'Fast Foods', image: '/cuisings/Frame.png' },
-                { name: 'Breakfast', image: '/cuisings/Frame (1).png' },
-                { name: 'Burgers', image: '/cuisings/Frame (3).png' },
+                { name: 'Burgers', image: '/cuisings/Frame%20(3).png' },
+                { name: 'Breakfast', image: '/cuisings/Frame%20(1).png' },
+                { name: 'American', image: '/cuisings/Frame.png' },
             ]
         },
         groceries: {
@@ -132,8 +134,10 @@ const CategoryPage = () => {
                             <div className="flex space-x-5 overflow-x-auto no-scrollbar py-2">
                                 {config.subcategories.map((sub, i) => (
                                     <button key={i} className="flex flex-col items-center space-y-2 flex-shrink-0 group">
-                                        <div className="w-14 h-14 md:w-16 md:h-16 bg-grey-light border border-grey-light-dark rounded-full flex items-center justify-center text-xl md:text-2xl group-hover:bg-primary-light/20 transition-colors group-active:scale-90">
-                                            {sub.emoji}
+                                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center group-hover:opacity-90 transition-opacity group-active:scale-90" style={{ backgroundColor: '#D4F0E3' }}>
+                                            {sub.image
+                                                ? <img src={sub.image} alt={sub.name} className="w-8 h-8 md:w-9 md:h-9 object-contain" />
+                                                : sub.emoji}
                                         </div>
                                         <span className="text-xs font-medium text-gray-600 text-center whitespace-nowrap">
                                             {sub.name}
@@ -167,9 +171,9 @@ const CategoryPage = () => {
                                 <Link
                                     key={restaurant.id}
                                     to={`/restaurant/${restaurant.id}`}
-                                    className="w-44 md:w-52 flex-shrink-0 group"
+                                    className="w-44 md:w-52 flex-shrink-0 group bg-white rounded-2xl shadow-sm border border-grey-light-dark overflow-hidden hover:shadow-md transition-all"
                                 >
-                                    <div className="relative h-28 md:h-32 w-full rounded-2xl overflow-hidden mb-2 shadow-sm border border-grey-light-dark">
+                                    <div className="relative h-28 md:h-32 w-full overflow-hidden">
                                         <img
                                             src={restaurant.image_url}
                                             alt={restaurant.name}
@@ -178,18 +182,28 @@ const CategoryPage = () => {
                                                 e.target.src = 'https://via.placeholder.com/400x300?text=Store';
                                             }}
                                         />
-                                        <div className="absolute top-2 left-2 bg-primary text-white text-[10px] font-bold px-2 py-0.5 rounded-md">
-                                            €3.00 off delivery
+                                        <div className="absolute bottom-2 right-2 flex items-center space-x-1 bg-primary text-white text-[10px] font-semibold px-2 py-1 rounded-lg">
+                                            <img src="/Icons/Icon.png" alt="" className="w-3 h-3" />
+                                            <span>€3.00 off delivery</span>
                                         </div>
                                     </div>
-                                    <h3 className="font-bold text-blackc text-sm leading-tight mb-0.5 line-clamp-1">{restaurant.name}</h3>
-                                    <p className="text-xs text-gray-500 line-clamp-1">{restaurant.description || 'Fresh and tasty f...'}</p>
-                                    <div className="flex items-center space-x-2 text-[11px] text-gray-500 mt-0.5">
-                                        <span className="font-semibold text-blackc">€{restaurant.delivery_fee || '3.00'}</span>
-                                        <span>•</span>
-                                        <span>{restaurant.delivery_time || '40-50min'}</span>
-                                        <span>•</span>
-                                        <span>⭐ {restaurant.rating || '9.5'}</span>
+                                    <div className="p-2.5">
+                                        <h3 className="font-bold text-blackc text-sm leading-tight mb-0.5 line-clamp-1">{restaurant.name}</h3>
+                                        <p className="text-[11px] text-gray-500 line-clamp-1 mb-2">{restaurant.description || 'Fresh and tasty f...'}</p>
+                                        <div className="flex items-center space-x-2 text-[11px] text-gray-600">
+                                            <span className="flex items-center space-x-1">
+                                                <img src="/Icons/Icon%20(1).png" alt="delivery" className="w-3.5 h-3.5" />
+                                                <span className="font-semibold text-blackc">€{restaurant.delivery_fee || '3.00'}</span>
+                                            </span>
+                                            <span className="flex items-center space-x-1">
+                                                <img src="/Icons/timer.png" alt="time" className="w-3.5 h-3.5" />
+                                                <span>{restaurant.delivery_time || '40-50min'}</span>
+                                            </span>
+                                            <span className="flex items-center space-x-1">
+                                                <img src="/Icons/star-Filled.png" alt="rating" className="w-3 h-3" />
+                                                <span>{restaurant.rating || '9.5'}</span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
@@ -218,8 +232,9 @@ const CategoryPage = () => {
                                                 e.target.src = 'https://via.placeholder.com/200x150?text=Store';
                                             }}
                                         />
-                                        <div className="absolute top-1 left-1 bg-primary text-white text-[9px] font-bold px-1.5 py-0.5 rounded">
-                                            €3.00 off delivery
+                                        <div className="absolute bottom-1 right-1 flex items-center space-x-0.5 bg-primary text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-md">
+                                            <img src="/Icons/Icon.png" alt="" className="w-2.5 h-2.5" />
+                                            <span>€3.00 off</span>
                                         </div>
                                     </div>
                                     <div className="flex-1 pl-3">
@@ -227,12 +242,19 @@ const CategoryPage = () => {
                                         <p className="text-xs text-gray-500 line-clamp-1 mb-1">
                                             {restaurant.description || 'Delicious meals, appetizing snacks, fr...'}
                                         </p>
-                                        <div className="flex items-center space-x-2 text-[11px] text-gray-500">
-                                            <span className="font-semibold text-blackc">€{restaurant.delivery_fee || '3.00'}</span>
-                                            <span>•</span>
-                                            <span>{restaurant.delivery_time || '40-50min'}</span>
-                                            <span>•</span>
-                                            <span>⭐ {restaurant.rating || '9.5'}</span>
+                                        <div className="flex items-center space-x-2 text-[11px] text-gray-600">
+                                            <span className="flex items-center space-x-1">
+                                                <img src="/Icons/Icon%20(1).png" alt="delivery" className="w-3.5 h-3.5" />
+                                                <span className="font-semibold text-blackc">€{restaurant.delivery_fee || '3.00'}</span>
+                                            </span>
+                                            <span className="flex items-center space-x-1">
+                                                <img src="/Icons/timer.png" alt="time" className="w-3.5 h-3.5" />
+                                                <span>{restaurant.delivery_time || '40-50min'}</span>
+                                            </span>
+                                            <span className="flex items-center space-x-1">
+                                                <img src="/Icons/star-Filled.png" alt="rating" className="w-3 h-3" />
+                                                <span>{restaurant.rating || '9.5'}</span>
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="text-gray-300 ml-2">

@@ -17,7 +17,7 @@ const RestaurantCard = ({ restaurant }) => {
         {restaurant.delivery_fee && (
           <div className="absolute bottom-2 right-2 bg-primary text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1.5 shadow">
             ${restaurant.delivery_fee} off delivery
-            <img src="/Icons/Icon%20(1).png" alt="discount" className="w-4 h-4" />
+            <img src="/Icons/Icon.png" alt="discount" className="w-4 h-4" />
           </div>
         )}
       </div>

@@ -14,7 +14,7 @@ const Home = () => {
     {
       id: 1, name: 'Restaurants', slug: 'restaurants',
       description: 'Order from your favorite places',
-      image: '/images/category-restaurants.png',
+      image: '/images/Image (1).png',
       fallbackImage: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop&q=80',
       overlayColor: 'from-orange-900/70 via-orange-800/40 to-transparent',
       accentColor: 'bg-orange-500',
@@ -87,7 +87,7 @@ useEffect(() => {
               <img
                 src="/images/banner-food.png"
                 alt="Delicious food"
-                className="w-full h-full object-cover object-center opacity-90"
+                className="w-full h-full object-contain object-center opacity-90"
                 onError={(e) => {
                   e.target.src = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&h=300&fit=crop&q=80';
                 }}

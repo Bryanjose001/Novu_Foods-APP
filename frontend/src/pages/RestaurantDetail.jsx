@@ -71,7 +71,7 @@ const RestaurantDetail = () => {
         <img
           src={restaurant.image_url}
           alt={restaurant.name}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
           onError={(e) => {
             e.target.src = 'https://via.placeholder.com/800x400?text=Restaurant';
           }}

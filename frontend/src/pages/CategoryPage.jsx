@@ -6,11 +6,12 @@ const CategoryPage = () => {
     const { slug } = useParams();
     const [restaurants, setRestaurants] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedSubcategory, setSelectedSubcategory] = useState('All');
 
     const categoryConfig = {
         restaurants: {
             title: 'Restaurants',
-            bannerImage: '/images/category-restaurants.png',
+            bannerImage: '/images/Image (1).png',
             bannerFallback: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&h=300&fit=crop&q=80',
             subcategories: [
                 { name: 'All', image: '/cuisings/Frame%20(2).png' },
@@ -55,7 +56,12 @@ const CategoryPage = () => {
 
     useEffect(() => {
         fetchRestaurants();
+        setSelectedSubcategory('All');
     }, [slug]);
+
+    const filteredBySubcategory = selectedSubcategory === 'All'
+        ? restaurants
+        : restaurants.filter(r => r.cuisine_type?.toLowerCase() === selectedSubcategory.toLowerCase());
 
     const slugToStoreType = {
         restaurants: 'restaurant',
@@ -136,18 +142,22 @@ const CategoryPage = () => {
                             </>
                         ) : (
                             <div className="flex space-x-5 overflow-x-auto no-scrollbar py-2">
-                                {config.subcategories.map((sub, i) => (
-                                    <button key={i} className="flex flex-col items-center space-y-2 flex-shrink-0 group">
-                                        <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center group-hover:opacity-90 transition-opacity group-active:scale-90" style={{ backgroundColor: '#D4F0E3' }}>
-                                            {sub.image
-                                                ? <img src={sub.image} alt={sub.name} className="w-8 h-8 md:w-9 md:h-9 object-contain" />
-                                                : sub.emoji}
-                                        </div>
-                                        <span className="text-xs font-medium text-gray-600 text-center whitespace-nowrap">
-                                            {sub.name}
-                                        </span>
-                                    </button>
-                                ))}
+                                {config.subcategories.map((sub, i) => {
+                                    const isActive = selectedSubcategory === sub.name;
+                                    return (
+                                        <button key={i} onClick={() => setSelectedSubcategory(sub.name)} className="flex flex-col items-center space-y-2 flex-shrink-0 group">
+                                            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all group-active:scale-90"
+                                                style={{ backgroundColor: isActive ? '#789070' : '#D4F0E3' }}>
+                                                {sub.image
+                                                    ? <img src={sub.image} alt={sub.name} className={`w-8 h-8 md:w-9 md:h-9 object-contain ${isActive ? 'brightness-0 invert' : ''}`} />
+                                                    : sub.emoji}
+                                            </div>
+                                            <span className={`text-xs font-medium text-center whitespace-nowrap ${isActive ? 'text-primary font-bold' : 'text-gray-600'}`}>
+                                                {sub.name}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
@@ -171,7 +181,7 @@ const CategoryPage = () => {
                 ) : (
                     <>
                         <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-4 mb-4">
-                            {restaurants.slice(0, 4).map((restaurant) => (
+                            {filteredBySubcategory.slice(0, 4).map((restaurant) => (
                                 <Link
                                     key={restaurant.id}
                                     to={`/restaurant/${restaurant.id}`}
@@ -196,7 +206,7 @@ const CategoryPage = () => {
                                         <p className="text-[11px] text-gray-500 line-clamp-1 mb-2">{restaurant.description || 'Fresh and tasty f...'}</p>
                                         <div className="flex items-center space-x-2 text-[11px] text-gray-600">
                                             <span className="flex items-center space-x-1">
-                                                <img src="/Icons/Icon%20(1).png" alt="delivery" className="w-3.5 h-3.5" />
+                                                <img src="/Icons/Icon.png" alt="delivery" className="w-3.5 h-3.5" />
                                                 <span className="font-semibold text-blackc">${restaurant.delivery_fee || '3.00'}</span>
                                             </span>
                                             <span className="flex items-center space-x-1">
@@ -221,7 +231,7 @@ const CategoryPage = () => {
                         </div>
 
                         <div className="space-y-4">
-                            {restaurants.slice(0, 6).map((restaurant) => (
+                            {filteredBySubcategory.slice(0, 6).map((restaurant) => (
                                 <Link
                                     key={`list-${restaurant.id}`}
                                     to={`/restaurant/${restaurant.id}`}
@@ -248,7 +258,7 @@ const CategoryPage = () => {
                                         </p>
                                         <div className="flex items-center space-x-2 text-[11px] text-gray-600">
                                             <span className="flex items-center space-x-1">
-                                                <img src="/Icons/Icon%20(1).png" alt="delivery" className="w-3.5 h-3.5" />
+                                                <img src="/Icons/Icon.png" alt="delivery" className="w-3.5 h-3.5" />
                                                 <span className="font-semibold text-blackc">${restaurant.delivery_fee || '3.00'}</span>
                                             </span>
                                             <span className="flex items-center space-x-1">

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { restaurantService, menuService, orderService, adminService } from '../services/api';
 
 const storeTypes = [
-    { key: 'all', label: 'All Stores'},
+    { key: 'all', label: 'All Stores' },
     { key: 'restaurant', label: 'Restaurants' },
     { key: 'grocery', label: 'Groceries' },
     { key: 'pharmacy', label: 'Pharmacy' },
@@ -20,6 +20,43 @@ const defaultImages = {
     grocery: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800',
     pharmacy: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800',
 };
+
+const storeTypeStyles = {
+    restaurant: { badge: 'bg-orange-100 text-orange-700', border: 'border-orange-400 bg-orange-50 text-orange-700', label: 'Restaurant' },
+    grocery: { badge: 'bg-green-100 text-green-700', border: 'border-green-400 bg-green-50 text-green-700', label: 'Grocery' },
+    pharmacy: { badge: 'bg-blue-100 text-blue-700', border: 'border-blue-400 bg-blue-50 text-blue-700', label: 'Pharmacy' },
+};
+
+const IconBack = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
+);
+const IconStore = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
+);
+const IconOrders = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" /><rect x="9" y="3" width="6" height="4" rx="2" /></svg>
+);
+const IconEdit = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+);
+const IconPlus = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+);
+const IconTrash = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" /></svg>
+);
+const IconEye = () => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+);
+const IconStar = () => (
+    <img src="/Icons/star-Filled.png" alt="rating" className="w-3.5 h-3.5" />
+);
+const IconDelivery = () => (
+    <img src="/Icons/Icon.png" alt="delivery" className="w-3.5 h-3.5" />
+);
+const IconTimer = () => (
+    <img src="/Icons/timer.png" alt="time" className="w-3.5 h-3.5" />
+);
 
 const AdminDashboard = () => {
     const navigate = useNavigate();
@@ -59,7 +96,7 @@ const AdminDashboard = () => {
         if (err.response && err.response.status === 401) {
             localStorage.removeItem('adminToken');
             setIsAuthenticated(false);
-            setLoginError('Session expired or unauthorized. Please login again.');
+            setLoginError('Session expired. Please login again.');
         }
     };
 
@@ -102,7 +139,6 @@ const AdminDashboard = () => {
     const handleStoreSubmit = async (e) => {
         e.preventDefault();
         setError(null);
-
         try {
             if (editingStore) {
                 await restaurantService.update(editingStore.id, storeForm);
@@ -157,12 +193,9 @@ const AdminDashboard = () => {
         e.preventDefault();
         setError(null);
         try {
-            await menuService.create({
-                restaurantId: showMenuForm,
-                ...menuForm,
-            });
+            await menuService.create({ restaurantId: showMenuForm, ...menuForm });
             const store = stores.find(s => s.id === showMenuForm);
-            setSuccess(`Menu item "${menuForm.name}" added to ${store?.name || 'store'}!`);
+            setSuccess(`"${menuForm.name}" added to ${store?.name || 'store'}!`);
             setMenuForm({ name: '', description: '', price: '', category: '', imageUrl: '' });
             setShowMenuForm(null);
             setTimeout(() => setSuccess(null), 4000);
@@ -196,23 +229,19 @@ const AdminDashboard = () => {
         return (
             <div className="min-h-screen bg-grey-full-light flex flex-col items-center justify-center p-4">
                 <div className="card w-full max-w-md p-8 text-center">
-                    <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
-                        
+                    <div className="w-16 h-16 gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                        <IconStore />
                     </div>
                     <h1 className="text-2xl font-bold text-blackc mb-2">Admin Access</h1>
-                    <p className="text-gray-500 mb-6 text-sm">Please enter the admin password to view the dashboard.</p>
-
+                    <p className="text-gray-500 mb-6 text-sm">Enter the admin password to continue.</p>
                     {loginError && (
                         <div className="bg-red-50 text-red-600 p-3 rounded-xl mb-4 text-sm border border-red-100">
                             {loginError}
                         </div>
                     )}
-
                     <form onSubmit={handleLogin} className="space-y-4">
                         <input
-                            type="password"
-                            required
-                            value={password}
+                            type="password" required value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             className="input-field text-center tracking-widest"
                             placeholder="••••••••"
@@ -233,43 +262,41 @@ const AdminDashboard = () => {
 
     return (
         <div className="min-h-screen bg-grey-full-light pb-24">
-            
-            <div className="gradient-primary text-white p-6 pb-8">
-                <div className="flex items-center justify-between mb-4">
+
+            {/* Header */}
+            <div className="gradient-primary text-white p-6 pb-10">
+                <div className="flex items-center justify-between mb-5">
                     <div className="flex items-center space-x-3">
-                        <Link to="/" className="w-10 h-10 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        <Link to="/" className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+                            <IconBack />
                         </Link>
                         <div>
                             <h1 className="text-2xl font-extrabold">Admin Dashboard</h1>
-                            <p className="text-sm opacity-80">Manage stores, menus & orders</p>
+                            <p className="text-sm opacity-75">Manage stores, menus & orders</p>
                         </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                        <span className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold">
-                            {stores.length} Stores
-                        </span>
-                        <span className="bg-white/20 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold">
-                            {orders.length} Orders
-                        </span>
+                        <span className="bg-white/20 px-3 py-1.5 rounded-full text-xs font-bold">{stores.length} Stores</span>
+                        <span className="bg-white/20 px-3 py-1.5 rounded-full text-xs font-bold">{orders.length} Orders</span>
                     </div>
                 </div>
 
                 <div className="flex items-center justify-between">
                     <div className="flex space-x-2">
                         {[
-                            { key: 'stores', label: 'Stores' },
-                            { key: 'orders', label: 'Orders' },
+                            { key: 'stores', label: 'Stores', icon: <IconStore /> },
+                            { key: 'orders', label: 'Orders', icon: <IconOrders /> },
                         ].map(s => (
                             <button
                                 key={s.key}
                                 onClick={() => setActiveSection(s.key)}
-                                className={`px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeSection === s.key
-                                        ? 'bg-white text-primary shadow-md'
-                                        : 'bg-white/10 text-white hover:bg-white/20'
+                                className={`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all ${activeSection === s.key
+                                    ? 'bg-white text-primary shadow-md'
+                                    : 'bg-white/15 text-white hover:bg-white/25'
                                     }`}
                             >
-                                {s.icon} {s.label}
+                                <span>{s.icon}</span>
+                                <span>{s.label}</span>
                             </button>
                         ))}
                     </div>
@@ -283,23 +310,24 @@ const AdminDashboard = () => {
             </div>
 
             <div className="px-4 -mt-4 relative z-10">
-                
+
+                {/* Alerts */}
                 {success && (
                     <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-4 flex items-center justify-between shadow-sm">
-                        <span className="flex items-center space-x-2"><span></span><span>{success}</span></span>
-                        <button onClick={() => setSuccess(null)} className="text-green-400 hover:text-green-700">✕</button>
+                        <span className="text-sm font-medium">{success}</span>
+                        <button onClick={() => setSuccess(null)} className="text-green-400 hover:text-green-700 ml-3">✕</button>
                     </div>
                 )}
                 {error && (
                     <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl mb-4 flex items-center justify-between shadow-sm">
-                        <span className="flex items-center space-x-2"><span></span><span>{error}</span></span>
-                        <button onClick={() => setError(null)} className="text-red-400 hover:text-red-700">✕</button>
+                        <span className="text-sm font-medium">{error}</span>
+                        <button onClick={() => setError(null)} className="text-red-400 hover:text-red-700 ml-3">✕</button>
                     </div>
                 )}
 
+                {/* Stores Section */}
                 {activeSection === 'stores' && (
                     <>
-                        
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
                             <div className="flex space-x-2 overflow-x-auto no-scrollbar">
                                 {storeTypes.map(t => (
@@ -311,7 +339,7 @@ const AdminDashboard = () => {
                                             : 'bg-white text-gray-600 border border-grey-light-dark hover:bg-grey-light'
                                             }`}
                                     >
-                                        {t.icon} {t.label}
+                                        {t.label}
                                     </button>
                                 ))}
                             </div>
@@ -319,39 +347,44 @@ const AdminDashboard = () => {
                                 onClick={() => { resetStoreForm(); setShowAddForm(!showAddForm); }}
                                 className="btn-primary flex items-center justify-center space-x-2 text-sm py-2.5 px-5"
                             >
-                                <span>{showAddForm ? '✕ Cancel' : '+ Add Store'}</span>
+                                <IconPlus />
+                                <span>{showAddForm ? 'Cancel' : 'Add Store'}</span>
                             </button>
                         </div>
 
+                        {/* Add / Edit Store Form */}
                         {showAddForm && (
                             <div className="card p-5 mb-5">
-                                <h2 className="text-lg font-bold text-blackc mb-4 flex items-center space-x-2">
-                                    
-                                    <span>{editingStore ? `Edit: ${editingStore.name}` : 'Add New Store'}</span>
+                                <h2 className="text-lg font-bold text-blackc mb-4">
+                                    {editingStore ? `Edit: ${editingStore.name}` : 'Add New Store'}
                                 </h2>
                                 <form onSubmit={handleStoreSubmit} className="space-y-4">
-                                    
+
+                                    {/* Store Type Picker */}
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-700 mb-1.5">Store Type *</label>
                                         <div className="flex space-x-3">
                                             {[
-                                                { key: 'restaurant', label: 'Restaurant',  color: 'orange' },
-                                                { key: 'grocery', label: 'Grocery',  color: 'green' },
-                                                { key: 'pharmacy', label: 'Pharmacy', color: 'blue' },
-                                            ].map(t => (
-                                                <button
-                                                    key={t.key}
-                                                    type="button"
-                                                    onClick={() => setStoreForm({ ...storeForm, storeType: t.key, cuisineType: '' })}
-                                                    className={`flex-1 py-3 px-3 rounded-xl text-sm font-bold border-2 transition-all flex flex-col items-center space-y-1 ${storeForm.storeType === t.key
-                                                        ? `border-${t.color}-500 bg-${t.color}-50 text-${t.color}-700`
-                                                        : 'border-grey-light-dark bg-white text-gray-500 hover:border-gray-300'
-                                                        }`}
-                                                >
-                                                    <span className="text-xl">{t.icon}</span>
-                                                    <span>{t.label}</span>
-                                                </button>
-                                            ))}
+                                                { key: 'restaurant', label: 'Restaurant' },
+                                                { key: 'grocery', label: 'Grocery' },
+                                                { key: 'pharmacy', label: 'Pharmacy' },
+                                            ].map(t => {
+                                                const styles = storeTypeStyles[t.key];
+                                                const isSelected = storeForm.storeType === t.key;
+                                                return (
+                                                    <button
+                                                        key={t.key}
+                                                        type="button"
+                                                        onClick={() => setStoreForm({ ...storeForm, storeType: t.key, cuisineType: '' })}
+                                                        className={`flex-1 py-3 px-3 rounded-xl text-sm font-bold border-2 transition-all ${isSelected
+                                                            ? styles.border
+                                                            : 'border-grey-light-dark bg-white text-gray-500 hover:border-gray-300'
+                                                            }`}
+                                                    >
+                                                        {t.label}
+                                                    </button>
+                                                );
+                                            })}
                                         </div>
                                     </div>
 
@@ -368,7 +401,9 @@ const AdminDashboard = () => {
                                                 onChange={e => setStoreForm({ ...storeForm, cuisineType: e.target.value })}
                                                 className="input-field">
                                                 <option value="">Select...</option>
-                                                {(cuisineTypesByStore[storeForm.storeType] || []).map(c => <option key={c} value={c}>{c}</option>)}
+                                                {(cuisineTypesByStore[storeForm.storeType] || []).map(c => (
+                                                    <option key={c} value={c}>{c}</option>
+                                                ))}
                                             </select>
                                         </div>
                                     </div>
@@ -433,7 +468,7 @@ const AdminDashboard = () => {
 
                                     <div className="flex space-x-3">
                                         <button type="submit" className="btn-primary flex-1 py-3">
-                                            {editingStore ? ' Save Changes' : ' Create Store'}
+                                            {editingStore ? 'Save Changes' : 'Create Store'}
                                         </button>
                                         {editingStore && (
                                             <button type="button" onClick={() => { resetStoreForm(); setShowAddForm(false); }}
@@ -444,11 +479,11 @@ const AdminDashboard = () => {
                             </div>
                         )}
 
+                        {/* Add Menu Item Form */}
                         {showMenuForm && (
                             <div className="card p-5 mb-5 border-2 border-primary">
-                                <h2 className="text-lg font-bold text-blackc mb-4 flex items-center space-x-2">
-                                    
-                                    <span>Add Menu Item to: {stores.find(s => s.id === showMenuForm)?.name}</span>
+                                <h2 className="text-lg font-bold text-blackc mb-4">
+                                    Add Menu Item — {stores.find(s => s.id === showMenuForm)?.name}
                                 </h2>
                                 <form onSubmit={handleMenuSubmit} className="space-y-4">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -486,7 +521,7 @@ const AdminDashboard = () => {
                                             className="input-field" placeholder="Describe the item..." />
                                     </div>
                                     <div className="flex space-x-3">
-                                        <button type="submit" className="btn-primary flex-1 py-3"> Add Item</button>
+                                        <button type="submit" className="btn-primary flex-1 py-3">Add Item</button>
                                         <button type="button" onClick={() => setShowMenuForm(null)}
                                             className="btn-secondary px-6">Cancel</button>
                                     </div>
@@ -494,117 +529,128 @@ const AdminDashboard = () => {
                             </div>
                         )}
 
+                        {/* Store List */}
                         {loading ? (
                             <div className="space-y-3">
                                 {[1, 2, 3].map(i => (
                                     <div key={i} className="card p-4 animate-pulse">
                                         <div className="flex items-center space-x-4">
-                                            <div className="w-16 h-16 bg-grey-light-dark rounded-xl"></div>
-                                            <div className="flex-1">
-                                                <div className="h-4 bg-grey-light-dark rounded w-1/3 mb-2"></div>
+                                            <div className="w-20 h-20 bg-grey-light-dark rounded-xl flex-shrink-0"></div>
+                                            <div className="flex-1 space-y-2">
+                                                <div className="h-4 bg-grey-light-dark rounded w-1/3"></div>
                                                 <div className="h-3 bg-grey-light-dark rounded w-1/2"></div>
+                                                <div className="h-3 bg-grey-light-dark rounded w-2/3"></div>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         ) : filteredStores.length === 0 ? (
-                            <div className="card p-8 text-center">
-                                <div className="text-5xl mb-3"></div>
+                            <div className="card p-10 text-center">
+                                <div className="w-16 h-16 bg-grey-light rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <IconStore />
+                                </div>
                                 <h3 className="text-lg font-bold text-blackc mb-1">No stores yet</h3>
                                 <p className="text-gray-500 text-sm">Click "Add Store" to create your first store.</p>
                             </div>
                         ) : (
                             <div className="space-y-3">
-                                {filteredStores.map(store => (
-                                    <div key={store.id} className="card p-4 hover:shadow-md transition-shadow">
-                                        <div className="flex items-start space-x-4">
-                                            
-                                            <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-grey-light border border-grey-light-dark">
-                                                <img
-                                                    src={store.image_url}
-                                                    alt={store.name}
-                                                    className="w-full h-full object-cover"
-                                                    onError={(e) => {
-                                                        e.target.src = defaultImages[store.store_type] || defaultImages.restaurant;
-                                                    }}
-                                                />
-                                            </div>
+                                {filteredStores.map(store => {
+                                    const typeStyle = storeTypeStyles[store.store_type] || storeTypeStyles.restaurant;
+                                    return (
+                                        <div key={store.id} className="card p-4 hover:shadow-md transition-shadow">
+                                            <div className="flex items-start space-x-4">
+                                                <div className="w-20 h-20 rounded-xl overflow-hidden flex-shrink-0 bg-grey-light border border-grey-light-dark">
+                                                    <img
+                                                        src={store.image_url}
+                                                        alt={store.name}
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                            e.target.src = defaultImages[store.store_type] || defaultImages.restaurant;
+                                                        }}
+                                                    />
+                                                </div>
 
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-start justify-between mb-1">
-                                                    <div>
-                                                        <h3 className="font-bold text-blackc text-base line-clamp-1">{store.name}</h3>
-                                                        <div className="flex items-center space-x-2 mt-0.5">
-                                                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${store.store_type === 'restaurant' ? 'bg-orange-100 text-orange-700' :
-                                                                store.store_type === 'grocery' ? 'bg-green-100 text-green-700' :
-                                                                    store.store_type === 'pharmacy' ? 'bg-blue-100 text-blue-700' :
-                                                                        'bg-gray-100 text-gray-700'
-                                                                }`}>
-                                                                 {(store.store_type || 'restaurant').toUpperCase()}
-                                                            </span>
-                                                            {store.cuisine_type && (
-                                                                <span className="text-[10px] text-gray-500">{store.cuisine_type}</span>
-                                                            )}
+                                                <div className="flex-1 min-w-0">
+                                                    <div className="flex items-start justify-between mb-1">
+                                                        <div>
+                                                            <h3 className="font-bold text-blackc text-base line-clamp-1">{store.name}</h3>
+                                                            <div className="flex items-center space-x-2 mt-0.5">
+                                                                <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${typeStyle.badge}`}>
+                                                                    {(store.store_type || 'restaurant').toUpperCase()}
+                                                                </span>
+                                                                {store.cuisine_type && (
+                                                                    <span className="text-[10px] text-gray-500">{store.cuisine_type}</span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex items-center space-x-1 text-sm flex-shrink-0">
+                                                            <IconStar />
+                                                            <span className="font-bold text-blackc">{store.rating || '0.0'}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="flex items-center space-x-1 text-sm">
-                                                        <span className="text-yellow-400"></span>
-                                                        <span className="font-bold text-blackc">{store.rating || '0.0'}</span>
+
+                                                    <div className="flex items-center space-x-3 text-xs text-gray-500 mt-1">
+                                                        <span className="line-clamp-1">{store.address || 'No address'}</span>
                                                     </div>
-                                                </div>
+                                                    <div className="flex items-center space-x-3 text-xs text-gray-500 mt-1">
+                                                        <span className="flex items-center space-x-1">
+                                                            <IconDelivery />
+                                                            <span>${store.delivery_fee || '3.00'}</span>
+                                                        </span>
+                                                        <span className="flex items-center space-x-1">
+                                                            <IconTimer />
+                                                            <span>{store.delivery_time || '30-40 min'}</span>
+                                                        </span>
+                                                    </div>
 
-                                                <div className="flex items-center space-x-3 text-xs text-gray-500 mt-1.5">
-                                                    <span> {store.address || 'No address'}</span>
-                                                </div>
-                                                <div className="flex items-center space-x-3 text-xs text-gray-500 mt-0.5">
-                                                    <span> ${store.delivery_fee || '3.00'}</span>
-                                                    <span> {store.delivery_time || '30-40 min'}</span>
-                                                </div>
-
-                                                <div className="flex items-center space-x-2 mt-3">
-                                                    <button
-                                                        onClick={() => handleEditStore(store)}
-                                                        className="text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
-                                                    >
-                                                         Edit
-                                                    </button>
-                                                    <button
-                                                        onClick={() => setShowMenuForm(store.id)}
-                                                        className="text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-colors"
-                                                    >
-                                                         Add Item
-                                                    </button>
-                                                    <Link
-                                                        to={`/restaurant/${store.id}`}
-                                                        className="text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
-                                                    >
-                                                         View
-                                                    </Link>
-                                                    <button
-                                                        onClick={() => handleDeleteStore(store)}
-                                                        className="text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors ml-auto"
-                                                    >
-                                                         Delete
-                                                    </button>
+                                                    <div className="flex items-center space-x-2 mt-3">
+                                                        <button
+                                                            onClick={() => handleEditStore(store)}
+                                                            className="flex items-center space-x-1 text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
+                                                        >
+                                                            <IconEdit /><span>Edit</span>
+                                                        </button>
+                                                        <button
+                                                            onClick={() => setShowMenuForm(store.id)}
+                                                            className="flex items-center space-x-1 text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-colors"
+                                                        >
+                                                            <IconPlus /><span>Add Item</span>
+                                                        </button>
+                                                        <Link
+                                                            to={`/restaurant/${store.id}`}
+                                                            className="flex items-center space-x-1 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                                                        >
+                                                            <IconEye /><span>View</span>
+                                                        </Link>
+                                                        <button
+                                                            onClick={() => handleDeleteStore(store)}
+                                                            className="flex items-center space-x-1 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors ml-auto"
+                                                        >
+                                                            <IconTrash /><span>Delete</span>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    );
+                                })}
                             </div>
                         )}
                     </>
                 )}
 
+                {/* Orders Section */}
                 {activeSection === 'orders' && (
                     <>
                         <h2 className="text-lg font-bold text-blackc mb-3 flex items-center space-x-2">
-                            <span></span><span>Recent Orders</span>
+                            <IconOrders /><span>Recent Orders</span>
                         </h2>
                         {orders.length === 0 ? (
-                            <div className="card p-8 text-center">
-                                <div className="text-5xl mb-3"></div>
+                            <div className="card p-10 text-center">
+                                <div className="w-16 h-16 bg-grey-light rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <IconOrders />
+                                </div>
                                 <h3 className="text-lg font-bold text-blackc mb-1">No orders yet</h3>
                                 <p className="text-gray-500 text-sm">Orders will appear here once customers place them.</p>
                             </div>
@@ -627,13 +673,13 @@ const AdminDashboard = () => {
                                             </span>
                                         </div>
                                         <div className="flex items-center justify-between text-xs text-gray-500">
-                                            <span> {order.delivery_address}</span>
+                                            <span>{order.delivery_address}</span>
                                             <span className="font-bold text-blackc text-sm">${parseFloat(order.total_amount || 0).toFixed(2)}</span>
                                         </div>
                                         <div className="flex items-center space-x-2 mt-2 text-xs text-gray-400">
-                                            <span> {order.customer_email || 'N/A'}</span>
+                                            <span>{order.customer_email || 'N/A'}</span>
                                             <span>•</span>
-                                            <span> {order.estimated_delivery || 'N/A'}</span>
+                                            <span>{order.estimated_delivery || 'N/A'}</span>
                                         </div>
                                     </div>
                                 ))}

@@ -57,17 +57,21 @@ const CategoryPage = () => {
         fetchRestaurants();
     }, [slug]);
 
+    const slugToStoreType = {
+        restaurants: 'restaurant',
+        groceries: 'grocery',
+        pharmacy: 'pharmacy',
+    };
+
     const fetchRestaurants = async () => {
         try {
             setLoading(true);
             const response = await restaurantService.getAll();
-            const filtered = response.data.filter(r =>
-                r.cuisine_type?.toLowerCase().includes(slug?.toLowerCase()) ||
-                slug === 'restaurants' ||
-                slug === 'food' ||
-                slug === 'premium'
-            );
-            setRestaurants(filtered.length > 0 ? filtered : response.data);
+            const storeType = slugToStoreType[slug];
+            const filtered = storeType
+                ? response.data.filter(r => (r.store_type || 'restaurant') === storeType)
+                : response.data;
+            setRestaurants(filtered);
         } catch (err) {
             console.error('Error fetching category items:', err);
         } finally {
@@ -184,7 +188,7 @@ const CategoryPage = () => {
                                         />
                                         <div className="absolute bottom-2 right-2 flex items-center space-x-1 bg-primary text-white text-[10px] font-semibold px-2 py-1 rounded-lg">
                                             <img src="/Icons/Icon.png" alt="" className="w-3 h-3" />
-                                            <span>€3.00 off delivery</span>
+                                            <span>$3.00 off delivery</span>
                                         </div>
                                     </div>
                                     <div className="p-2.5">
@@ -193,7 +197,7 @@ const CategoryPage = () => {
                                         <div className="flex items-center space-x-2 text-[11px] text-gray-600">
                                             <span className="flex items-center space-x-1">
                                                 <img src="/Icons/Icon%20(1).png" alt="delivery" className="w-3.5 h-3.5" />
-                                                <span className="font-semibold text-blackc">€{restaurant.delivery_fee || '3.00'}</span>
+                                                <span className="font-semibold text-blackc">${restaurant.delivery_fee || '3.00'}</span>
                                             </span>
                                             <span className="flex items-center space-x-1">
                                                 <img src="/Icons/timer.png" alt="time" className="w-3.5 h-3.5" />
@@ -234,7 +238,7 @@ const CategoryPage = () => {
                                         />
                                         <div className="absolute bottom-1 right-1 flex items-center space-x-0.5 bg-primary text-white text-[9px] font-semibold px-1.5 py-0.5 rounded-md">
                                             <img src="/Icons/Icon.png" alt="" className="w-2.5 h-2.5" />
-                                            <span>€3.00 off</span>
+                                            <span>$3.00 off</span>
                                         </div>
                                     </div>
                                     <div className="flex-1 pl-3">
@@ -245,7 +249,7 @@ const CategoryPage = () => {
                                         <div className="flex items-center space-x-2 text-[11px] text-gray-600">
                                             <span className="flex items-center space-x-1">
                                                 <img src="/Icons/Icon%20(1).png" alt="delivery" className="w-3.5 h-3.5" />
-                                                <span className="font-semibold text-blackc">€{restaurant.delivery_fee || '3.00'}</span>
+                                                <span className="font-semibold text-blackc">${restaurant.delivery_fee || '3.00'}</span>
                                             </span>
                                             <span className="flex items-center space-x-1">
                                                 <img src="/Icons/timer.png" alt="time" className="w-3.5 h-3.5" />

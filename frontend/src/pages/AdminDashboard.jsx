@@ -9,12 +9,11 @@ const storeTypes = [
     { key: 'pharmacy', label: 'Pharmacy' },
 ];
 
-const cuisineTypes = [
-    'American', 'Italian', 'Mexican', 'Chinese', 'Japanese',
-    'Indian', 'Thai', 'Mediterranean', 'French', 'Korean',
-    'Vietnamese', 'Greek', 'Middle Eastern', 'Caribbean',
-    'Grocery', 'Pharmacy', 'Health & Beauty', 'General', 'Other'
-];
+const cuisineTypesByStore = {
+    restaurant: ['Fast Foods', 'Burgers', 'Breakfast', 'American', 'Italian', 'Mexican', 'Chinese', 'Japanese', 'Indian', 'Thai', 'Mediterranean', 'French', 'Korean', 'Vietnamese', 'Greek', 'Middle Eastern', 'Caribbean'],
+    grocery: ['Fresh Fruits & Vegetable', 'Cooking Oil & Ghee', 'Meat & Fish', 'Bakery & Snacks', 'Dairy & Eggs', 'Beverages'],
+    pharmacy: ['Pharmacy', 'CBD', 'Technologies', 'Beauty'],
+};
 
 const defaultImages = {
     restaurant: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800',
@@ -343,7 +342,7 @@ const AdminDashboard = () => {
                                                 <button
                                                     key={t.key}
                                                     type="button"
-                                                    onClick={() => setStoreForm({ ...storeForm, storeType: t.key })}
+                                                    onClick={() => setStoreForm({ ...storeForm, storeType: t.key, cuisineType: '' })}
                                                     className={`flex-1 py-3 px-3 rounded-xl text-sm font-bold border-2 transition-all flex flex-col items-center space-y-1 ${storeForm.storeType === t.key
                                                         ? `border-${t.color}-500 bg-${t.color}-50 text-${t.color}-700`
                                                         : 'border-grey-light-dark bg-white text-gray-500 hover:border-gray-300'
@@ -369,7 +368,7 @@ const AdminDashboard = () => {
                                                 onChange={e => setStoreForm({ ...storeForm, cuisineType: e.target.value })}
                                                 className="input-field">
                                                 <option value="">Select...</option>
-                                                {cuisineTypes.map(c => <option key={c} value={c}>{c}</option>)}
+                                                {(cuisineTypesByStore[storeForm.storeType] || []).map(c => <option key={c} value={c}>{c}</option>)}
                                             </select>
                                         </div>
                                     </div>
@@ -412,7 +411,7 @@ const AdminDashboard = () => {
                                                 className="input-field" placeholder="https://..." />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Delivery Fee (€)</label>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Delivery Fee ($)</label>
                                             <input type="number" step="0.01" value={storeForm.deliveryFee}
                                                 onChange={e => setStoreForm({ ...storeForm, deliveryFee: e.target.value })}
                                                 className="input-field" placeholder="3.00" />
@@ -460,7 +459,7 @@ const AdminDashboard = () => {
                                                 className="input-field" placeholder="e.g. Cheeseburger" />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Price (€) *</label>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Price ($) *</label>
                                             <input type="number" step="0.01" required value={menuForm.price}
                                                 onChange={e => setMenuForm({ ...menuForm, price: e.target.value })}
                                                 className="input-field" placeholder="9.99" />
@@ -629,7 +628,7 @@ const AdminDashboard = () => {
                                         </div>
                                         <div className="flex items-center justify-between text-xs text-gray-500">
                                             <span> {order.delivery_address}</span>
-                                            <span className="font-bold text-blackc text-sm">€{parseFloat(order.total_amount || 0).toFixed(2)}</span>
+                                            <span className="font-bold text-blackc text-sm">${parseFloat(order.total_amount || 0).toFixed(2)}</span>
                                         </div>
                                         <div className="flex items-center space-x-2 mt-2 text-xs text-gray-400">
                                             <span> {order.customer_email || 'N/A'}</span>

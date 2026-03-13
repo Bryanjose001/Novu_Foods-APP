@@ -88,7 +88,7 @@ const RestaurantDetail = () => {
           <div>
             <h1 className="text-3xl font-extrabold mb-2 text-white">{restaurant.name}</h1>
             <div className="flex items-center space-x-3 text-sm font-medium opacity-90">
-              <span className="flex items-center"><span className="text-yellow-400 mr-1">⭐</span> {restaurant.rating || '4.8'}</span>
+              <span className="flex items-center"><img src="/Icons/star-Filled.png" alt="rating" className="w-4 h-4 mr-1" /> {restaurant.rating || '4.8'}</span>
               <span>•</span>
               <span>{restaurant.delivery_time || '30-40 min'}</span>
               <span>•</span>

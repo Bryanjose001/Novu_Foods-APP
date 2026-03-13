@@ -7,6 +7,8 @@ const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showBanner, setShowBanner] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCuisine, setSelectedCuisine] = useState('All');
 
   const mainSections = [
     {
@@ -43,25 +45,14 @@ const Home = () => {
   ];
 
   const cuisineCategories = [
-    { id: 1, name: 'American', image: '/cuisings/Frame.png' },
-    { id: 2, name: 'Burgers', image: '/cuisings/Frame (3).png' },
-    { id: 3, name: 'Breakfast', image: '/cuisings/' },
-    { id: 4, name: 'Pizza', image: '/cuisings/' },
-    { id: 5, name: 'Sushi', image: '/cuisings/' },
-    { id: 6, name: 'Mexican', image: '/cuisings/' },
-    { id: 7, name: 'Chinese', image: '/cuisings/' },
+    { id: 0, name: 'All', image: '/cuisings/Frame%20(2).png' },
+    { id: 1, name: 'Fast Foods', image: '/cuisings/Frame.png' },
+    { id: 2, name: 'Burgers', image: '/cuisings/Frame%20(3).png' },
+    { id: 3, name: 'Breakfast', image: '/cuisings/Frame%20(1).png' },
+    { id: 4, name: 'American', image: '/cuisings/Frame.png' },
   ];
 
-  const superCategories = [
-    { id: 1, name: 'Fresh Fruits & Vegetable' },
-    { id: 2, name: 'Cooking Oil & Ghee' },
-    { id: 3, name: 'Meat & Fish' },
-    { id: 4, name: 'Bakery & Snacks' },
-    { id: 5, name: 'Dairy & Eggs' },
-    { id: 6, name: 'Beverages' },
-  ];
-
-  useEffect(() => {
+useEffect(() => {
     fetchRestaurants();
   }, []);
 
@@ -75,6 +66,15 @@ const Home = () => {
       setLoading(false);
     }
   };
+
+  const filteredRestaurants = restaurants.filter((r) => {
+    const matchesSearch = searchQuery === '' ||
+      r.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      r.description?.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCuisine = selectedCuisine === 'All' ||
+      r.cuisine_type?.toLowerCase() === selectedCuisine.toLowerCase();
+    return matchesSearch && matchesCuisine;
+  });
 
   return (
     <div className="bg-grey-full-light min-h-screen pb-20 md:pb-8">
@@ -122,6 +122,8 @@ const Home = () => {
         <div className="relative">
           <input
             type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search for dishes, restaurants..."
             className="w-full pl-10 pr-4 py-3 rounded-xl text-sm outline-none text-gray-700 bg-white shadow-sm border border-grey-light-dark focus:ring-2 focus:ring-primary/30 placeholder:text-gray-400"
           />
@@ -131,7 +133,24 @@ const Home = () => {
         </div>
       </div>
 
-<div className="px-4 mb-6">
+<div className="px-4 mb-4">
+        <div className="flex space-x-3 overflow-x-auto no-scrollbar py-1">
+          {cuisineCategories.map((c) => (
+            <button
+              key={c.id}
+              onClick={() => setSelectedCuisine(c.name)}
+              className={`flex flex-col items-center flex-shrink-0 group focus:outline-none`}
+            >
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-1 border-2 transition-colors ${selectedCuisine === c.name ? 'border-primary bg-primary/10' : 'border-transparent bg-grey-light'}`}>
+                <img src={c.image} alt={c.name} className="w-8 h-8 object-contain" />
+              </div>
+              <span className={`text-[11px] font-medium ${selectedCuisine === c.name ? 'text-primary font-bold' : 'text-gray-600'}`}>{c.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-4 mb-6">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-lg font-bold text-blackc">Top Restaurant</h2>
           <Link to="/category/restaurants" className="text-sm font-semibold text-gray-800 px-4 py-1.5 rounded-full transition-colors" style={{ backgroundColor: '#A1EEC7' }}>            See all
@@ -150,11 +169,13 @@ const Home = () => {
           </div>
         ) : (
           <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-2">
-            {restaurants.map((restaurant) => (
+            {filteredRestaurants.length > 0 ? filteredRestaurants.map((restaurant) => (
               <div key={restaurant.id} className="w-44 md:w-52 flex-shrink-0">
                 <RestaurantCard restaurant={restaurant} />
               </div>
-            ))}
+            )) : (
+              <p className="text-sm text-gray-400 py-4">No restaurants found.</p>
+            )}
           </div>
         )}
       </div>
@@ -194,33 +215,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="px-4 mb-6">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-lg font-bold text-blackc flex items-center">
-            <span className="mr-2"></span> Super markets
-          </h2>
-          <Link to="/category/restaurants" className="text-sm font-semibold text-gray-800 px-4 py-1.5 rounded-full transition-colors" style={{ backgroundColor: '#A1EEC7' }}>
-            See all
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
-          {superCategories.map((cat) => (
-            <Link
-              key={cat.id}
-              to="/category/groceries"
-              className="flex flex-col items-center group"
-            >
-              <div className="w-16 h-16 md:w-20 md:h-20 bg-grey-light rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-1.5 group-hover:bg-primary-light/20 transition-colors border border-grey-light-dark group-active:scale-90">
-                {cat.emoji}
-              </div>
-              <span className="text-[10px] md:text-xs font-medium text-gray-600 text-center leading-tight line-clamp-2">{cat.name}</span>
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      <div className="px-4 mb-6">
+<div className="px-4 mb-6">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-lg font-bold text-blackc flex items-center">
             <span className="mr-2"></span> Promotions

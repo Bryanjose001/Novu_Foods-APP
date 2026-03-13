@@ -131,22 +131,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="px-4 mb-6">
-        <div className="flex space-x-5 overflow-x-auto no-scrollbar py-2">
-          {cuisineCategories.map((c) => (
-            <div key={c.id} className="flex items-center gap-2">
-              <img
-                src={c.image}
-                alt={c.name}
-                className="w-6 h-6 object-contain"
-              />
-              <span>{c.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="px-4 mb-6">
+<div className="px-4 mb-6">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-lg font-bold text-blackc">Top Restaurant</h2>
           <Link to="/category/restaurants" className="text-sm font-semibold text-gray-800 px-4 py-1.5 rounded-full transition-colors" style={{ backgroundColor: '#A1EEC7' }}>            See all

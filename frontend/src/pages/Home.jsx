@@ -8,34 +8,6 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [showBanner, setShowBanner] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCuisine, setSelectedCuisine] = useState('All');
-
-  const mainSections = [
-    {
-      id: 1, name: 'Restaurants', slug: 'restaurants',
-      description: 'Order from your favorite places',
-      image: '/images/Image (1).png',
-      fallbackImage: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop&q=80',
-      overlayColor: 'from-orange-900/70 via-orange-800/40 to-transparent',
-      accentColor: 'bg-orange-500',
-    },
-    {
-      id: 2, name: 'Groceries', slug: 'groceries',
-      description: 'Fresh produce & essentials',
-      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=400&fit=crop&q=80',
-      fallbackImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=400&fit=crop&q=80',
-      overlayColor: 'from-green-900/70 via-green-800/40 to-transparent',
-      accentColor: 'bg-green-500',
-    },
-    {
-      id: 3, name: 'Pharmacy', slug: 'pharmacy',
-      description: 'Health, beauty & wellness',
-      image: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&h=400&fit=crop&q=80',
-      fallbackImage: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&h=400&fit=crop&q=80',
-      overlayColor: 'from-blue-900/70 via-blue-800/40 to-transparent',
-      accentColor: 'bg-blue-500',
-    },
-  ];
 
   const promoCategories = [
     { id: 1, name: 'Brunch', places: '94 places', image: '/images/promo-brunch.png', fallback: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=200&h=200&fit=crop&q=80', bgColor: 'bg-amber-50' },
@@ -44,13 +16,6 @@ const Home = () => {
     { id: 4, name: 'Salads', places: '52 places', image: '/images/promo-salad.png', fallback: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=200&h=200&fit=crop&q=80', bgColor: 'bg-lime-50' },
   ];
 
-  const cuisineCategories = [
-    { id: 0, name: 'All', image: '/cuisings/Frame%20(2).png' },
-    { id: 1, name: 'Fast Foods', image: '/cuisings/Frame.png' },
-    { id: 2, name: 'Burgers', image: '/cuisings/Frame%20(3).png' },
-    { id: 3, name: 'Breakfast', image: '/cuisings/Frame%20(1).png' },
-    { id: 4, name: 'American', image: '/cuisings/Frame.png' },
-  ];
 
 useEffect(() => {
     fetchRestaurants();
@@ -67,14 +32,11 @@ useEffect(() => {
     }
   };
 
-  const filteredRestaurants = restaurants.filter((r) => {
-    const matchesSearch = searchQuery === '' ||
-      r.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      r.description?.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCuisine = selectedCuisine === 'All' ||
-      r.cuisine_type?.toLowerCase() === selectedCuisine.toLowerCase();
-    return matchesSearch && matchesCuisine;
-  });
+  const filteredRestaurants = restaurants.filter((r) =>
+    searchQuery === '' ||
+    r.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    r.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="bg-grey-full-light min-h-screen pb-20 md:pb-8">
@@ -133,22 +95,6 @@ useEffect(() => {
         </div>
       </div>
 
-<div className="px-4 mb-4">
-        <div className="flex space-x-3 overflow-x-auto no-scrollbar py-1">
-          {cuisineCategories.map((c) => (
-            <button
-              key={c.id}
-              onClick={() => setSelectedCuisine(c.name)}
-              className={`flex flex-col items-center flex-shrink-0 group focus:outline-none`}
-            >
-              <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-1 border-2 transition-colors ${selectedCuisine === c.name ? 'border-primary bg-primary/10' : 'border-transparent bg-grey-light'}`}>
-                <img src={c.image} alt={c.name} className="w-8 h-8 object-contain" />
-              </div>
-              <span className={`text-[11px] font-medium ${selectedCuisine === c.name ? 'text-primary font-bold' : 'text-gray-600'}`}>{c.name}</span>
-            </button>
-          ))}
-        </div>
-      </div>
 
       <div className="px-4 mb-6">
         <div className="flex justify-between items-center mb-3">
@@ -180,40 +126,6 @@ useEffect(() => {
         )}
       </div>
 
-      <div className="px-4 mb-6">
-        <h2 className="text-lg font-bold text-blackc mb-3">What are you looking for?</h2>
-        <div className="grid grid-cols-3 gap-3 md:gap-4">
-          {mainSections.map((section) => (
-            <Link
-              key={section.id}
-              to={`/category/${section.slug}`}
-              className="group"
-            >
-              <div className="relative rounded-2xl overflow-hidden aspect-square hover:shadow-lg transition-all active:scale-95">
-
-                <img
-                  src={section.image}
-                  alt={section.name}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    e.target.src = section.fallbackImage;
-                  }}
-                />
-
-                <div className={`absolute inset-0 bg-gradient-to-t ${section.overlayColor}`}></div>
-
-                <div className="relative z-10 h-full flex flex-col items-center justify-end p-3 pb-4 text-white text-center">
-                  <span className="text-2xl md:text-3xl mb-1 drop-shadow-lg group-hover:scale-110 transition-transform">{section.icon}</span>
-                  <span className="font-bold text-sm md:text-base leading-tight drop-shadow-lg">{section.name}</span>
-                  <span className="text-[9px] md:text-xs opacity-90 mt-0.5 hidden md:block drop-shadow-md">{section.description}</span>
-                </div>
-
-                <div className={`absolute top-2 right-2 w-2.5 h-2.5 ${section.accentColor} rounded-full shadow-sm`}></div>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </div>
 
 <div className="px-4 mb-6">
         <div className="flex justify-between items-center mb-3">

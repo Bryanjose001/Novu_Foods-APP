@@ -2,6 +2,82 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { restaurantService } from '../services/api';
 
+const C = '#789070';
+const GroceryIcons = {
+    fruits: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <path d="M20 8c-1 0-2 .4-2.8 1C15.5 7.4 13 7 11 8.5c-3 2-3.5 6-1.5 9 1 1.5 2.5 3 4.5 4.5.5.4 1 .8 1.5 1.2V26h2v-2.8c.5-.4 1-.8 1.5-1.2 2-1.5 3.5-3 4.5-4.5 2-3 1.5-7-1.5-9C21.5 8 20.8 8 20 8z" fill={C}/>
+            <path d="M20 5c0 0 1-2.5 3-3" stroke={C} strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+    ),
+    oil: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <rect x="15" y="6" width="10" height="4" rx="2" fill={C}/>
+            <path d="M14 10h12l2 4v14a3 3 0 0 1-3 3H15a3 3 0 0 1-3-3V14l2-4z" fill={C} opacity=".8"/>
+            <rect x="17" y="16" width="6" height="8" rx="1" fill="white" opacity=".4"/>
+            <circle cx="27" cy="11" r="2" fill={C}/>
+            <path d="M27 9v-3" stroke={C} strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+    ),
+    meat: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <path d="M28 12a6 6 0 0 0-8.5 0L10 21.5a6 6 0 1 0 8.5 8.5L28 20.5a6 6 0 0 0 0-8.5z" fill={C} opacity=".85"/>
+            <circle cx="27" cy="13" r="3" fill={C}/>
+            <path d="M14 18l4 4" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity=".5"/>
+        </svg>
+    ),
+    bakery: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <path d="M8 22c0-6 3-10 12-10s12 4 12 10v2a3 3 0 0 1-3 3H11a3 3 0 0 1-3-3v-2z" fill={C}/>
+            <path d="M13 15c0-2 1.5-3.5 7-3.5S27 13 27 15" stroke={C} strokeWidth="2" fill="none" opacity=".5"/>
+            <path d="M12 27h16" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity=".4"/>
+            <path d="M15 22h10" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity=".4"/>
+        </svg>
+    ),
+    dairy: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <path d="M14 8h12l2 6v16a2 2 0 0 1-2 2H14a2 2 0 0 1-2-2V14l2-6z" fill={C} opacity=".85"/>
+            <rect x="12" y="8" width="16" height="4" rx="2" fill={C}/>
+            <path d="M16 18c0 0 2-2 4 0s4 0 4 0" stroke="white" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity=".6"/>
+            <rect x="17" y="22" width="6" height="5" rx="1" fill="white" opacity=".35"/>
+        </svg>
+    ),
+    beverages: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <path d="M13 11h14l-2 18a2 2 0 0 1-2 2H17a2 2 0 0 1-2-2L13 11z" fill={C} opacity=".85"/>
+            <rect x="12" y="8" width="16" height="4" rx="2" fill={C}/>
+            <path d="M27 13h4l-1 8h-3" stroke={C} strokeWidth="1.5" strokeLinejoin="round" fill="none"/>
+            <path d="M17 18c2-1 4-1 6 0" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity=".5"/>
+        </svg>
+    ),
+    pharmacy: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <rect x="10" y="10" width="20" height="20" rx="4" fill={C} opacity=".85"/>
+            <path d="M20 15v10M15 20h10" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+        </svg>
+    ),
+    cbd: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <path d="M20 6l3 7h7l-6 4 2 7-6-4-6 4 2-7-6-4h7z" fill={C} opacity=".85"/>
+        </svg>
+    ),
+    tech: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <rect x="8" y="10" width="24" height="16" rx="3" fill={C} opacity=".85"/>
+            <rect x="15" y="26" width="10" height="3" fill={C} opacity=".6"/>
+            <rect x="12" y="29" width="16" height="2" rx="1" fill={C} opacity=".5"/>
+            <rect x="11" y="13" width="18" height="10" rx="1" fill="white" opacity=".25"/>
+        </svg>
+    ),
+    beauty: (
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
+            <path d="M20 7c-2 0-4 1.5-4 4 0 1.5.8 3 2 4l2 2 2-2c1.2-1 2-2.5 2-4 0-2.5-2-4-4-4z" fill={C}/>
+            <rect x="16" y="18" width="8" height="14" rx="3" fill={C} opacity=".85"/>
+            <path d="M17 22h6M17 26h6" stroke="white" strokeWidth="1" strokeLinecap="round" opacity=".5"/>
+        </svg>
+    ),
+};
+
 const CategoryPage = () => {
     const { slug } = useParams();
     const [restaurants, setRestaurants] = useState([]);
@@ -26,14 +102,12 @@ const CategoryPage = () => {
             bannerImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=300&fit=crop&q=80',
             bannerFallback: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=300&fit=crop&q=80',
             subcategories: [
-                { name: 'Fresh Fruits & Vegetable' },
-                { name: 'Cooking Oil & Ghee' },
-                { name: 'Meat & Fish' },
-                { name: 'Bakery & Snacks' },
-                { name: 'Dairy & Eggs' },
-                { name: 'Beverages' },
-                { name: 'Meat & Fish' },
-                { name: 'Fresh Fruits & Vegetable' },
+                { name: 'Fresh Fruits & Vegetable', icon: GroceryIcons.fruits },
+                { name: 'Cooking Oil & Ghee', icon: GroceryIcons.oil },
+                { name: 'Meat & Fish', icon: GroceryIcons.meat },
+                { name: 'Bakery & Snacks', icon: GroceryIcons.bakery },
+                { name: 'Dairy & Eggs', icon: GroceryIcons.dairy },
+                { name: 'Beverages', icon: GroceryIcons.beverages },
             ]
         },
         pharmacy: {
@@ -41,10 +115,11 @@ const CategoryPage = () => {
             bannerImage: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&h=300&fit=crop&q=80',
             bannerFallback: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=800&h=300&fit=crop&q=80',
             subcategories: [
-                { name: 'Pharmacy' },
-                { name: 'CBD' },
-                { name: 'Technologies' },
-                { name: 'Beauty' },
+                { name: 'All', icon: GroceryIcons.pharmacy },
+                { name: 'Pharmacy', icon: GroceryIcons.pharmacy },
+                { name: 'CBD', icon: GroceryIcons.cbd },
+                { name: 'Technologies', icon: GroceryIcons.tech },
+                { name: 'Beauty', icon: GroceryIcons.beauty },
             ]
         }
     };
@@ -61,7 +136,10 @@ const CategoryPage = () => {
 
     const filteredBySubcategory = selectedSubcategory === 'All'
         ? restaurants
-        : restaurants.filter(r => r.cuisine_type?.toLowerCase() === selectedSubcategory.toLowerCase());
+        : restaurants.filter(r => {
+            if (!r.cuisine_type) return false;
+            return r.cuisine_type.split(',').map(s => s.trim().toLowerCase()).includes(selectedSubcategory.toLowerCase());
+        });
 
     const slugToStoreType = {
         restaurants: 'restaurant',
@@ -128,16 +206,21 @@ const CategoryPage = () => {
                                 </div>
 
                                 <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
-                                    {config.subcategories.map((sub, i) => (
-                                        <button key={i} className="flex flex-col items-center group">
-                                            <div className="w-16 h-16 md:w-20 md:h-20 bg-grey-light border border-grey-light-dark rounded-2xl flex items-center justify-center text-2xl md:text-3xl mb-1.5 group-hover:bg-primary-light/20 transition-colors group-active:scale-90">
-                                                {sub.emoji}
-                                            </div>
-                                            <span className="text-[10px] md:text-xs font-medium text-gray-600 text-center leading-tight line-clamp-2">
-                                                {sub.name}
-                                            </span>
-                                        </button>
-                                    ))}
+                                    {config.subcategories.map((sub, i) => {
+                                        const isActive = selectedSubcategory === sub.name;
+                                        return (
+                                            <button key={i} onClick={() => setSelectedSubcategory(sub.name)} className="flex flex-col items-center group">
+                                                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-1.5 transition-all overflow-hidden group-active:scale-90 border ${isActive ? 'border-primary bg-primary/10' : 'bg-grey-light border-grey-light-dark group-hover:bg-primary-light/20'}`}>
+                                                    {sub.icon ?? (sub.image
+                                                        ? <img src={sub.image} alt={sub.name} className="w-full h-full object-cover" />
+                                                        : sub.emoji)}
+                                                </div>
+                                                <span className={`text-[10px] md:text-xs font-medium text-center leading-tight line-clamp-2 ${isActive ? 'text-primary font-bold' : 'text-gray-600'}`}>
+                                                    {sub.name}
+                                                </span>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </>
                         ) : (
@@ -148,9 +231,9 @@ const CategoryPage = () => {
                                         <button key={i} onClick={() => setSelectedSubcategory(sub.name)} className="flex flex-col items-center space-y-2 flex-shrink-0 group">
                                             <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all group-active:scale-90"
                                                 style={{ backgroundColor: isActive ? '#789070' : '#D4F0E3' }}>
-                                                {sub.image
+                                                {sub.icon ?? (sub.image
                                                     ? <img src={sub.image} alt={sub.name} className={`w-8 h-8 md:w-9 md:h-9 object-contain ${isActive ? 'brightness-0 invert' : ''}`} />
-                                                    : sub.emoji}
+                                                    : sub.emoji)}
                                             </div>
                                             <span className={`text-xs font-medium text-center whitespace-nowrap ${isActive ? 'text-primary font-bold' : 'text-gray-600'}`}>
                                                 {sub.name}

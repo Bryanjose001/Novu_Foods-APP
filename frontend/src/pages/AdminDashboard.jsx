@@ -76,10 +76,20 @@ const AdminDashboard = () => {
     const [success, setSuccess] = useState(null);
 
     const [storeForm, setStoreForm] = useState({
-        name: '', cuisineType: '', ownerName: '', ownerEmail: '',
+        name: '', cuisineType: [], ownerName: '', ownerEmail: '',
         ownerPhone: '', address: '', description: '', imageUrl: '',
         storeType: 'restaurant', deliveryFee: '3.00', deliveryTime: '30-40 min',
     });
+
+    const toggleCuisine = (cuisine) => {
+        setStoreForm(prev => {
+            const current = Array.isArray(prev.cuisineType) ? prev.cuisineType : prev.cuisineType.split(',').map(s => s.trim()).filter(Boolean);
+            const updated = current.includes(cuisine)
+                ? current.filter(c => c !== cuisine)
+                : [...current, cuisine];
+            return { ...prev, cuisineType: updated };
+        });
+    };
 
     const [menuForm, setMenuForm] = useState({
         name: '', description: '', price: '', category: '', imageUrl: '',
@@ -129,7 +139,7 @@ const AdminDashboard = () => {
 
     const resetStoreForm = () => {
         setStoreForm({
-            name: '', cuisineType: '', ownerName: '', ownerEmail: '',
+            name: '', cuisineType: [], ownerName: '', ownerEmail: '',
             ownerPhone: '', address: '', description: '', imageUrl: '',
             storeType: 'restaurant', deliveryFee: '3.00', deliveryTime: '30-40 min',
         });
@@ -139,12 +149,18 @@ const AdminDashboard = () => {
     const handleStoreSubmit = async (e) => {
         e.preventDefault();
         setError(null);
+        const formToSend = {
+            ...storeForm,
+            cuisineType: Array.isArray(storeForm.cuisineType)
+                ? storeForm.cuisineType.join(', ')
+                : storeForm.cuisineType,
+        };
         try {
             if (editingStore) {
-                await restaurantService.update(editingStore.id, storeForm);
+                await restaurantService.update(editingStore.id, formToSend);
                 setSuccess(`"${storeForm.name}" updated successfully!`);
             } else {
-                await restaurantService.signup(storeForm);
+                await restaurantService.signup(formToSend);
                 setSuccess(`"${storeForm.name}" created successfully!`);
             }
             resetStoreForm();
@@ -160,7 +176,7 @@ const AdminDashboard = () => {
     const handleEditStore = (store) => {
         setStoreForm({
             name: store.name || '',
-            cuisineType: store.cuisine_type || '',
+            cuisineType: store.cuisine_type ? store.cuisine_type.split(',').map(s => s.trim()).filter(Boolean) : [],
             ownerName: store.owner_name || '',
             ownerEmail: store.owner_email || '',
             ownerPhone: store.owner_phone || '',
@@ -375,7 +391,7 @@ const AdminDashboard = () => {
                                                     <button
                                                         key={t.key}
                                                         type="button"
-                                                        onClick={() => setStoreForm({ ...storeForm, storeType: t.key, cuisineType: '' })}
+                                                        onClick={() => setStoreForm({ ...storeForm, storeType: t.key, cuisineType: [] })}
                                                         className={`flex-1 py-3 px-3 rounded-xl text-sm font-bold border-2 transition-all ${isSelected
                                                             ? styles.border
                                                             : 'border-grey-light-dark bg-white text-gray-500 hover:border-gray-300'
@@ -396,15 +412,30 @@ const AdminDashboard = () => {
                                                 className="input-field" placeholder="e.g. Fresh Market" />
                                         </div>
                                         <div>
-                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Category / Cuisine</label>
-                                            <select value={storeForm.cuisineType}
-                                                onChange={e => setStoreForm({ ...storeForm, cuisineType: e.target.value })}
-                                                className="input-field">
-                                                <option value="">Select...</option>
-                                                {(cuisineTypesByStore[storeForm.storeType] || []).map(c => (
-                                                    <option key={c} value={c}>{c}</option>
-                                                ))}
-                                            </select>
+                                            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
+                                                Categories
+                                                {Array.isArray(storeForm.cuisineType) && storeForm.cuisineType.length > 0 && (
+                                                    <span className="ml-2 text-primary font-normal text-xs">({storeForm.cuisineType.length} selected)</span>
+                                                )}
+                                            </label>
+                                            <div className="flex flex-wrap gap-2">
+                                                {(cuisineTypesByStore[storeForm.storeType] || []).map(c => {
+                                                    const selected = Array.isArray(storeForm.cuisineType) && storeForm.cuisineType.includes(c);
+                                                    return (
+                                                        <button
+                                                            key={c}
+                                                            type="button"
+                                                            onClick={() => toggleCuisine(c)}
+                                                            className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${selected
+                                                                ? 'bg-primary text-white border-primary'
+                                                                : 'bg-white text-gray-600 border-grey-light-dark hover:border-primary hover:text-primary'
+                                                                }`}
+                                                        >
+                                                            {c}
+                                                        </button>
+                                                    );
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
 

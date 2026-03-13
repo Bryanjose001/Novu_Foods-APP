@@ -11,7 +11,7 @@ const storeTypes = [
 
 const cuisineTypesByStore = {
     restaurant: ['Fast Foods', 'Burgers', 'Breakfast', 'American', 'Italian', 'Mexican', 'Chinese', 'Japanese', 'Indian', 'Thai', 'Mediterranean', 'French', 'Korean', 'Vietnamese', 'Greek', 'Middle Eastern', 'Caribbean'],
-    grocery: ['Fresh Fruits & Vegetable', 'Cooking Oil & Ghee', 'Meat & Fish', 'Bakery & Snacks', 'Dairy & Eggs', 'Beverages'],
+    grocery: ['Fresh Food', 'Cooking Oil & Ghee', 'Meat & Fish', 'Bakery & Snacks', 'Dairy & Eggs', 'Beverages'],
     pharmacy: ['Pharmacy', 'CBD', 'Technologies', 'Beauty'],
 };
 

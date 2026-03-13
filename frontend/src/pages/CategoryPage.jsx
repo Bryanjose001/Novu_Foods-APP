@@ -58,7 +58,7 @@ const GroceryIcons = {
     ),
     cbd: (
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-9 h-9">
-            <path d="M20 6l3 7h7l-6 4 2 7-6-4-6 4 2-7-6-4h7z" fill={C} opacity=".85"/>
+            <path d="M20 7l3.1 6.3 6.9 1-5 4.9 1.2 6.8L20 22.8l-6.2 3.2L15 19.2l-5-4.9 6.9-1z" fill={C} opacity=".85"/>
         </svg>
     ),
     tech: (
@@ -102,7 +102,7 @@ const CategoryPage = () => {
             bannerImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=300&fit=crop&q=80',
             bannerFallback: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&h=300&fit=crop&q=80',
             subcategories: [
-                { name: 'Fresh Fruits & Vegetable', icon: GroceryIcons.fruits },
+                { name: 'Fresh Food', icon: GroceryIcons.fruits },
                 { name: 'Cooking Oil & Ghee', icon: GroceryIcons.oil },
                 { name: 'Meat & Fish', icon: GroceryIcons.meat },
                 { name: 'Bakery & Snacks', icon: GroceryIcons.bakery },
@@ -166,7 +166,7 @@ const CategoryPage = () => {
     return (
         <div className="min-h-screen bg-grey-full-light pb-24">
             {config.bannerImage && (
-                <div className="relative h-40 md:h-56 w-full overflow-hidden">
+                <div className="relative h-40 md:h-56 w-full overflow-hidden rounded-b-3xl -mt-6">
                     <img
                         src={config.bannerImage}
                         alt={config.title}
@@ -179,7 +179,7 @@ const CategoryPage = () => {
                 </div>
             )}
 
-            <div className={`p-4 ${config.bannerImage ? '-mt-8 relative z-10' : ''}`}>
+            <div className={`p-4 ${config.bannerImage ? '-mt-8 relative z-10 rounded-t-3xl bg-grey-full-light' : ''}`}>
                 <div className="flex items-center space-x-3 mb-5">
                     <Link to="/" className="w-9 h-9 bg-white border border-grey-light-dark rounded-full flex items-center justify-center text-blackc hover:bg-grey-light-dark transition-colors shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6" /></svg>
@@ -198,51 +198,27 @@ const CategoryPage = () => {
 
                 {config.subcategories.length > 0 && (
                     <div className="mb-6">
-                        {slug === 'groceries' ? (
-                            <>
-                                <div className="flex justify-between items-center mb-3">
-                                    <h2 className="text-lg font-bold text-blackc">Shop by category</h2>
-                                    <button className="text-sm font-semibold text-gray-800 px-4 py-1.5 rounded-full transition-colors" style={{ backgroundColor: '#A1EEC7' }}>See all</button>
-                                </div>
-
-                                <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
-                                    {config.subcategories.map((sub, i) => {
-                                        const isActive = selectedSubcategory === sub.name;
-                                        return (
-                                            <button key={i} onClick={() => setSelectedSubcategory(sub.name)} className="flex flex-col items-center group">
-                                                <div className={`w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center mb-1.5 transition-all overflow-hidden group-active:scale-90 border ${isActive ? 'border-primary bg-primary/10' : 'bg-grey-light border-grey-light-dark group-hover:bg-primary-light/20'}`}>
-                                                    {sub.icon ?? (sub.image
-                                                        ? <img src={sub.image} alt={sub.name} className="w-full h-full object-cover" />
-                                                        : sub.emoji)}
-                                                </div>
-                                                <span className={`text-[10px] md:text-xs font-medium text-center leading-tight line-clamp-2 ${isActive ? 'text-primary font-bold' : 'text-gray-600'}`}>
-                                                    {sub.name}
-                                                </span>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </>
-                        ) : (
-                            <div className="flex space-x-5 overflow-x-auto no-scrollbar py-2">
-                                {config.subcategories.map((sub, i) => {
-                                    const isActive = selectedSubcategory === sub.name;
-                                    return (
-                                        <button key={i} onClick={() => setSelectedSubcategory(sub.name)} className="flex flex-col items-center space-y-2 flex-shrink-0 group">
-                                            <div className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center transition-all group-active:scale-90"
-                                                style={{ backgroundColor: isActive ? '#789070' : '#D4F0E3' }}>
+                        <div className="flex space-x-5 overflow-x-auto no-scrollbar py-2">
+                            {config.subcategories.map((sub, i) => {
+                                const isActive = selectedSubcategory === sub.name;
+                                return (
+                                    <button key={i} onClick={() => setSelectedSubcategory(sub.name)} className="flex flex-col items-center space-y-2 flex-shrink-0 group">
+                                        <div className="w-16 h-16 md:w-18 md:h-18 rounded-full flex items-center justify-center transition-all group-active:scale-90"
+                                            style={{ backgroundColor: isActive ? '#789070' : '#D4F0E3', width: '64px', height: '64px' }}>
+                                            <div className={`flex items-center justify-center ${isActive ? 'brightness-0 invert' : ''}`}
+                                                style={{ filter: isActive ? 'brightness(0) invert(1)' : 'none' }}>
                                                 {sub.icon ?? (sub.image
-                                                    ? <img src={sub.image} alt={sub.name} className={`w-8 h-8 md:w-9 md:h-9 object-contain ${isActive ? 'brightness-0 invert' : ''}`} />
+                                                    ? <img src={sub.image} alt={sub.name} className="w-9 h-9 object-contain" />
                                                     : sub.emoji)}
                                             </div>
-                                            <span className={`text-xs font-medium text-center whitespace-nowrap ${isActive ? 'text-primary font-bold' : 'text-gray-600'}`}>
-                                                {sub.name}
-                                            </span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                        )}
+                                        </div>
+                                        <span className={`text-xs font-medium text-center whitespace-nowrap ${isActive ? 'text-primary font-bold' : 'text-gray-600'}`}>
+                                            {sub.name}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                 )}
 

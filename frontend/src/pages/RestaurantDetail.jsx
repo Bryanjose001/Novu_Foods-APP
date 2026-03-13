@@ -67,11 +67,11 @@ const RestaurantDetail = () => {
   return (
     <div className="bg-grey-full-light min-h-screen pb-24 relative">
       
-      <div className="relative h-64 md:h-80 lg:h-[400px] w-full">
+      <div className="relative h-64 md:h-80 lg:h-[400px] w-full rounded-b-3xl -mt-6 overflow-hidden">
         <img
           src={restaurant.image_url}
           alt={restaurant.name}
-          className="w-full h-full object-contain"
+          className="w-full h-full object-cover object-center"
           onError={(e) => {
             e.target.src = 'https://via.placeholder.com/800x400?text=Restaurant';
           }}

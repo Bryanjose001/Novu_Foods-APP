@@ -86,9 +86,9 @@ const RestaurantDetail = () => {
 
         <div className="absolute bottom-0 left-0 right-0 p-6 text-white z-10 flex justify-between items-end">
           <div>
-            <h1 className="text-3xl font-extrabold mb-2 text-white">{restaurant.name}</h1>
-            <div className="flex items-center space-x-3 text-sm font-medium opacity-90">
-              <span className="flex items-center"><img src="/Icons/star-Filled.png" alt="rating" className="w-4 h-4 mr-1" /> {restaurant.rating || '4.8'}</span>
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2 text-white leading-tight">{restaurant.name}</h1>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs sm:text-sm font-medium opacity-90">
+              <span className="flex items-center"><img src="/Icons/star-Filled.png" alt="rating" className="w-3.5 h-3.5 mr-1" /> {restaurant.rating || '4.8'}</span>
               <span>•</span>
               <span>{restaurant.delivery_time || '30-40 min'}</span>
               <span>•</span>
@@ -109,7 +109,9 @@ const RestaurantDetail = () => {
         </div>
 
         <div className="relative mb-8">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
           <input
             type="text"
             placeholder="Search for dishes..."
@@ -129,27 +131,27 @@ const RestaurantDetail = () => {
           ) : (
             filteredItems.map((item) => (
               <div key={item.id} className="flex items-center group cursor-pointer hover:bg-grey-light p-2 rounded-xl transition-colors -mx-2" onClick={() => addToCart(item, restaurant.id)}>
-                
-                <div className="w-24 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-grey-light shadow-sm relative border border-grey-light-dark">
+
+                <div className="w-20 h-14 sm:w-24 sm:h-16 rounded-lg overflow-hidden flex-shrink-0 bg-grey-light shadow-sm relative border border-grey-light-dark">
                   {item.image_url ? (
                     <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-300 text-xs">No Image</div>
                   )}
-                  <button className="absolute bottom-1 right-1 bg-white rounded-full w-6 h-6 flex items-center justify-center text-primary shadow-sm md:hidden">
-                    <span className="text-lg leading-none">+</span>
+                  <button className="absolute bottom-1 right-1 bg-white rounded-full w-5 h-5 flex items-center justify-center text-primary shadow-sm md:hidden">
+                    <span className="text-base leading-none">+</span>
                   </button>
                 </div>
 
-                <div className="flex-1 px-4 flex flex-col justify-center">
-                  <h4 className="font-bold text-blackc text-base mb-0.5">{item.name}</h4>
+                <div className="flex-1 px-2 sm:px-4 flex flex-col justify-center min-w-0">
+                  <h4 className="font-bold text-blackc text-sm sm:text-base mb-0.5 line-clamp-1">{item.name}</h4>
                   <p className="text-gray-400 text-xs line-clamp-1">{item.description || 'Delicious meal item'}</p>
                 </div>
 
-                <div className="flex items-center space-x-3">
-                  <span className="font-bold text-blackc text-lg">${parseFloat(item.price).toFixed(2)}</span>
+                <div className="flex items-center space-x-1 sm:space-x-3 flex-shrink-0">
+                  <span className="font-bold text-blackc text-sm sm:text-lg">${parseFloat(item.price).toFixed(2)}</span>
                   <span className="text-gray-300">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                   </span>
                 </div>
               </div>

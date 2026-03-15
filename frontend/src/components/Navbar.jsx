@@ -13,7 +13,7 @@ const Navbar = () => {
 
         <div className="flex items-center space-x-2">
           <Link to="/" className="flex items-center space-x-2">
-            <img src={novuLogo} alt="Novu Foods" className="w-24 h-24 rounded-lg" />
+            <img src={novuLogo} alt="Novu Foods" className="h-9 w-auto md:h-11" />
           </Link>
         </div>
 

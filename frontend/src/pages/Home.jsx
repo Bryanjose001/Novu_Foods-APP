@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { restaurantService } from '../services/api';
 import RestaurantCard from '../components/RestaurantCard';
@@ -162,7 +162,7 @@ useEffect(() => {
         ) : (
           <div className="flex space-x-4 overflow-x-auto no-scrollbar pb-2">
             {filteredRestaurants.length > 0 ? filteredRestaurants.map((restaurant) => (
-              <div key={restaurant.id} className="w-44 md:w-52 flex-shrink-0">
+              <div key={restaurant.id} className="w-40 sm:w-44 md:w-52 flex-shrink-0">
                 <RestaurantCard restaurant={restaurant} />
               </div>
             )) : (

@@ -257,6 +257,17 @@ app.get('/api/orders', async (req, res) => {
   }
 })
 
+app.delete('/api/orders/:id', async (req, res) => {
+  try {
+    const { id } = req.params
+    await pool.query('DELETE FROM orders WHERE id = $1', [id])
+    res.json({ success: true })
+  } catch (error) {
+    console.error('Error deleting order:', error)
+    res.status(500).json({ error: 'Failed to delete order' })
+  }
+})
+
 app.get('/api/restaurants/search/:query', async (req, res) => {
   try {
     const { query } = req.params

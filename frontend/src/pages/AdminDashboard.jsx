@@ -133,6 +133,31 @@ const AdminDashboard = () => {
         }
     };
 
+    const handleUpdateOrderStatus = async (order, status) => {
+        try {
+            await orderService.updateStatus(order.id, status);
+            setSuccess(`Order #${String(order.id).slice(0, 8)} updated to "${status}".`);
+            fetchOrders();
+            setTimeout(() => setSuccess(null), 3000);
+        } catch (err) {
+            setError(err.response?.data?.error || 'Failed to update order');
+            handleAuthError(err);
+        }
+    };
+
+    const handleDeleteOrder = async (order) => {
+        if (!window.confirm(`Delete Order #${String(order.id).slice(0, 8)}?`)) return;
+        try {
+            await orderService.delete(order.id);
+            setSuccess(`Order deleted.`);
+            fetchOrders();
+            setTimeout(() => setSuccess(null), 3000);
+        } catch (err) {
+            setError(err.response?.data?.error || 'Failed to delete order');
+            handleAuthError(err);
+        }
+    };
+
     const filteredStores = activeTab === 'all'
         ? stores
         : stores.filter(s => (s.store_type || 'restaurant') === activeTab);
@@ -674,9 +699,20 @@ const AdminDashboard = () => {
                 {/* Orders Section */}
                 {activeSection === 'orders' && (
                     <>
-                        <h2 className="text-lg font-bold text-blackc mb-3 flex items-center space-x-2">
-                            <IconOrders /><span>Recent Orders</span>
-                        </h2>
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center space-x-2">
+                                <div className="w-8 h-8 gradient-primary rounded-lg flex items-center justify-center text-white">
+                                    <IconOrders />
+                                </div>
+                                <div>
+                                    <h2 className="text-base font-bold text-blackc leading-tight">Recent Orders</h2>
+                                    <p className="text-xs text-gray-400">{orders.length} total</p>
+                                </div>
+                            </div>
+                            <button onClick={fetchOrders} className="text-xs font-semibold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors">
+                                Refresh
+                            </button>
+                        </div>
                         {orders.length === 0 ? (
                             <div className="card p-10 text-center">
                                 <div className="w-16 h-16 bg-grey-light rounded-full flex items-center justify-center mx-auto mb-3">
@@ -689,12 +725,12 @@ const AdminDashboard = () => {
                             <div className="space-y-3">
                                 {orders.map(order => (
                                     <div key={order.id} className="card p-4">
-                                        <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-start justify-between mb-2">
                                             <div>
                                                 <h3 className="font-bold text-blackc text-sm">Order #{String(order.id).slice(0, 8)}</h3>
-                                                <p className="text-xs text-gray-500">{order.customer_name}</p>
+                                                <p className="text-xs text-gray-500 mt-0.5">{order.customer_name} • {order.customer_email || 'N/A'}</p>
                                             </div>
-                                            <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${order.status === 'delivered' ? 'bg-green-100 text-green-700' :
+                                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${order.status === 'delivered' ? 'bg-green-100 text-green-700' :
                                                 order.status === 'preparing' ? 'bg-yellow-100 text-yellow-700' :
                                                     order.status === 'on_the_way' ? 'bg-blue-100 text-blue-700' :
                                                         order.status === 'cancelled' ? 'bg-red-100 text-red-700' :
@@ -703,14 +739,29 @@ const AdminDashboard = () => {
                                                 {order.status?.replace('_', ' ').toUpperCase()}
                                             </span>
                                         </div>
-                                        <div className="flex items-center justify-between text-xs text-gray-500">
-                                            <span>{order.delivery_address}</span>
-                                            <span className="font-bold text-blackc text-sm">${parseFloat(order.total_amount || 0).toFixed(2)}</span>
+                                        <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
+                                            <span className="line-clamp-1 flex-1 mr-2">{order.delivery_address}</span>
+                                            <span className="font-bold text-blackc text-sm flex-shrink-0">${parseFloat(order.total_amount || 0).toFixed(2)}</span>
                                         </div>
-                                        <div className="flex items-center space-x-2 mt-2 text-xs text-gray-400">
-                                            <span>{order.customer_email || 'N/A'}</span>
-                                            <span>•</span>
-                                            <span>{order.estimated_delivery || 'N/A'}</span>
+                                        <div className="flex items-center space-x-2">
+                                            <select
+                                                value={order.status || 'pending'}
+                                                onChange={(e) => handleUpdateOrderStatus(order, e.target.value)}
+                                                className="flex-1 text-xs font-semibold border border-grey-light-dark rounded-lg px-2 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30"
+                                            >
+                                                <option value="pending">Pending</option>
+                                                <option value="confirmed">Confirmed</option>
+                                                <option value="preparing">Preparing</option>
+                                                <option value="on_the_way">On the Way</option>
+                                                <option value="delivered">Delivered</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                            <button
+                                                onClick={() => handleDeleteOrder(order)}
+                                                className="flex items-center space-x-1 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors flex-shrink-0"
+                                            >
+                                                <IconTrash /><span>Delete</span>
+                                            </button>
                                         </div>
                                     </div>
                                 ))}

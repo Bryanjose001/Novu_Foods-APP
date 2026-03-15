@@ -9,6 +9,52 @@ const Home = () => {
   const [showBanner, setShowBanner] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
+  const mainSections = [
+    {
+      id: 1, name: 'Restaurants', slug: 'restaurants',
+      description: 'Order from your favorite places',
+      image: '/images/Image (1).png',
+      fallbackImage: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=400&h=400&fit=crop&q=80',
+      overlayColor: 'from-orange-900/70 via-orange-800/40 to-transparent',
+      icon: (
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+          <path d="M6 13h20M8 13V9a8 8 0 0 1 16 0v4" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+          <rect x="5" y="13" width="22" height="3" rx="1.5" fill="white" fillOpacity="0.9"/>
+          <path d="M7 16l1.5 10h15L25 16" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M13 21h6" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+        </svg>
+      ),
+    },
+    {
+      id: 2, name: 'Groceries', slug: 'groceries',
+      description: 'Fresh produce & essentials',
+      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=400&fit=crop&q=80',
+      fallbackImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=400&fit=crop&q=80',
+      overlayColor: 'from-green-900/70 via-green-800/40 to-transparent',
+      icon: (
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+          <path d="M4 5h3l3 14h14l2-9H10" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          <circle cx="13" cy="24" r="2" fill="white"/>
+          <circle cx="22" cy="24" r="2" fill="white"/>
+          <path d="M14 11l2 2 4-4" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      ),
+    },
+    {
+      id: 3, name: 'Pharmacy', slug: 'pharmacy',
+      description: 'Health, beauty & wellness',
+      image: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&h=400&fit=crop&q=80',
+      fallbackImage: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?w=400&h=400&fit=crop&q=80',
+      overlayColor: 'from-blue-900/70 via-blue-800/40 to-transparent',
+      icon: (
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+          <rect x="13" y="5" width="6" height="22" rx="3" fill="white" fillOpacity="0.9"/>
+          <rect x="5" y="13" width="22" height="6" rx="3" fill="white" fillOpacity="0.9"/>
+        </svg>
+      ),
+    },
+  ];
+
   const promoCategories = [
     { id: 1, name: 'Brunch', places: '94 places', image: '/images/promo-brunch.png', fallback: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=200&h=200&fit=crop&q=80', bgColor: 'bg-amber-50' },
     { id: 2, name: 'Sea food', places: '43 places', image: '/images/promo-seafood.png', fallback: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=200&h=200&fit=crop&q=80', bgColor: 'bg-emerald-50' },
@@ -126,8 +172,31 @@ useEffect(() => {
         )}
       </div>
 
+      <div className="px-4 mb-6">
+        <h2 className="text-lg font-bold text-blackc mb-3">What are you looking for?</h2>
+        <div className="grid grid-cols-3 gap-3">
+          {mainSections.map((section) => (
+            <Link key={section.id} to={`/category/${section.slug}`} className="group">
+              <div className="relative rounded-2xl overflow-hidden aspect-square hover:shadow-lg transition-all active:scale-95">
+                <img
+                  src={section.image}
+                  alt={section.name}
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => { e.target.src = section.fallbackImage; }}
+                />
+                <div className={`absolute inset-0 bg-gradient-to-t ${section.overlayColor}`}></div>
+                <div className="relative z-10 h-full flex flex-col items-center justify-end p-3 pb-4 text-white text-center">
+                  <span className="text-2xl mb-1 drop-shadow-lg">{section.emoji}</span>
+                  <span className="font-bold text-sm leading-tight drop-shadow-lg">{section.name}</span>
+                  <span className="text-[9px] opacity-90 mt-0.5 hidden md:block drop-shadow-md">{section.description}</span>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
 
-<div className="px-4 mb-6">
+      <div className="px-4 mb-6">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-lg font-bold text-blackc flex items-center">
             <span className="mr-2"></span> Promotions

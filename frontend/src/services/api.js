@@ -38,6 +38,7 @@ export const orderService = {
   getById: (id) => api.get(`/orders/${id}`),
   updateStatus: (id, status) => api.patch(`/orders/${id}/status`, { status }),
   getAll: () => api.get('/orders'),
+  delete: (id) => api.delete(`/orders/${id}`),
 }
 
 export const menuService = {

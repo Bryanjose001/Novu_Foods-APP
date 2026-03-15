@@ -21,7 +21,7 @@ function App() {
 
             <Navbar />
 
-            <main className="flex-1 w-full rounded-t-3xl -mt-4 bg-grey-full-light relative z-10">
+            <main className="flex-1 w-full rounded-t-3xl bg-grey-full-light relative z-10">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/category/:slug" element={<CategoryPage />} />

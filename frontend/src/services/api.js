@@ -1,50 +1,21 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000'
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
 })
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('adminToken')
-  if (token) {
-    config.headers['x-admin-token'] = token
-  }
-  return config
-}, (error) => {
-  return Promise.reject(error)
-})
-
-export const adminService = {
-  verify: (password) => api.post('/admin/verify', { password }),
-}
 
 export const restaurantService = {
-  getAll: () => api.get('/restaurants'),
-  getById: (id) => api.get(`/restaurants/${id}`),
-  getMenu: (id) => api.get(`/restaurants/${id}/menu`),
-  search: (query) => api.get(`/restaurants/search/${query}`),
-  signup: (data) => api.post('/restaurants/signup', data),
-  update: (id, data) => api.put(`/restaurants/${id}`, data),
-  delete: (id) => api.delete(`/restaurants/${id}`),
+  getAll: () => api.get('/api/restaurants'),
+  getById: (id) => api.get(`/api/restaurants/${id}`),
+  getMenu: (id) => api.get(`/api/restaurants/${id}/menu`),
+  search: (query) => api.get(`/api/restaurants/search/${query}`),
 }
 
 export const orderService = {
-  create: (orderData) => api.post('/orders', orderData),
-  getById: (id) => api.get(`/orders/${id}`),
-  updateStatus: (id, status) => api.patch(`/orders/${id}/status`, { status }),
-  getAll: () => api.get('/orders'),
-  delete: (id) => api.delete(`/orders/${id}`),
+  create: (data) => api.post('/api/orders', data),
+  getById: (id) => api.get(`/api/orders/${id}`),
+  getAll: () => api.get('/api/orders'),
+  updateStatus: (id, status) => api.patch(`/api/orders/${id}/status`, { status }),
 }
-
-export const menuService = {
-  getById: (id) => api.get(`/menu-items/${id}`),
-  create: (data) => api.post('/menu-items', data),
-  delete: (id) => api.delete(`/menu-items/${id}`),
-}
-
-export default api

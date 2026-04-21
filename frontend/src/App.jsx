@@ -11,6 +11,10 @@ import RestaurantSignUp from './pages/RestaurantSignUp';
 import AdminDashboard from './pages/AdminDashboard';
 import BottomNav from './components/BottomNav';
 import CategoryPage from './pages/CategoryPage';
+<<<<<<< HEAD
+=======
+import SearchResults from './pages/SearchResults';
+>>>>>>> 3c1536b4060b4e85dc5766d52d9fb68df73a7144
 
 function App() {
   return (
@@ -25,6 +29,10 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/category/:slug" element={<CategoryPage />} />
+<<<<<<< HEAD
+=======
+                <Route path="/search" element={<SearchResults />} />
+>>>>>>> 3c1536b4060b4e85dc5766d52d9fb68df73a7144
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/restaurant-signup" element={<RestaurantSignUp />} />
                 <Route path="/admin" element={<AdminDashboard />} />

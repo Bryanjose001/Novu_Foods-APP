@@ -1,9 +1,17 @@
+<<<<<<< HEAD
+=======
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+>>>>>>> 3c1536b4060b4e85dc5766d52d9fb68df73a7144
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
+=======
+>>>>>>> 3c1536b4060b4e85dc5766d52d9fb68df73a7144
 @layer base {
   body {
     @apply bg-grey-full-light text-blackc font-sans;

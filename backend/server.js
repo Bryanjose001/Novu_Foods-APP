@@ -14,10 +14,7 @@ const pool = new Pool({
   },
 })
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 3c1536b4060b4e85dc5766d52d9fb68df73a7144
 app.use(cors())
 app.use(express.json())
 
@@ -481,3 +478,23 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = app
+
+
+const { pool, runMigrations } = require('./config/db');
+
+const start = async () => {
+  try {
+    await pool.query('SELECT NOW()');
+    console.log('DB connected');
+
+    await runMigrations();
+
+    app.listen(PORT, () => {
+      console.log(`Server running on ${PORT}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+start();

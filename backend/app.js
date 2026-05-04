@@ -8,4 +8,4 @@ app.use('/api/orders', orderRoutes);
 
 const menuRoutes = require('./routes/menuRoutes');
 
-app.use('/api/menu-items', menuRoutes);
+app.use('/api/menu-items', menuRoutes); 

@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require('../config/database');
 
 // GET menu by restaurant
 const getMenuByRestaurant = async (req, res) => {

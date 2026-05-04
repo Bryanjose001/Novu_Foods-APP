@@ -28,8 +28,14 @@ const runMigrations = async () => {
     throw error;
   }
 };
+const connect = async () => {
+  await pool.query('SELECT NOW()');
+  console.log('Database connected successfully');
+  await runMigrations();
+};
 
 module.exports = {
   pool,
   runMigrations,
+  connect
 };

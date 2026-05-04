@@ -1,4 +1,4 @@
-const pool = require('../config/db');
+const pool = require('../config/database');
 
 // CREATE ORDER (with transaction)
 const createOrder = async (req, res) => {

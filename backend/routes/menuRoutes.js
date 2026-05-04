@@ -8,14 +8,14 @@ const {
   deleteMenuItem,
 } = require('../controllers/menuController');
 
-const { requireAdmin } = require('../middleware/authMiddleware');
+//const { requireAdmin } = require('../middleware/authMiddleware');
 
 // Public routes
 router.get('/restaurant/:id', getMenuByRestaurant);
 router.get('/:id', getMenuItemById);
 
 // Admin routes
-router.post('/', requireAdmin, createMenuItem);
-router.delete('/:id', requireAdmin, deleteMenuItem);
+//router.post('/', requireAdmin, createMenuItem);
+//router.delete('/:id', requireAdmin, deleteMenuItem);
 
 module.exports = router;

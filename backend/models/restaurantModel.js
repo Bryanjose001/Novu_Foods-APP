@@ -25,16 +25,6 @@ const getRestaurantsMenu = async (req, res) => {
    return result.rows
 }
 
-const getRestaurantsMenu = async (req, res) => {
-    const { id } = req.params
-    const result = await pool.query(
-      `SELECT * FROM menu_items 
-       WHERE restaurant_id = $1 AND available = true 
-       ORDER BY category, name`,
-      [id]
-    )
-    res.json(result.rows)
-}
 
 module.exports = {
     findAll,

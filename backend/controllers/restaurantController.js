@@ -13,11 +13,7 @@ const getRestaurants = async (req, res) => {
 
 const getRestaurantById = async (req, res) => {
   try {
-    const result = await pool.query(
-      'SELECT * FROM restaurants WHERE id = $1',
       [req.params.id]
-    );
-
     if (!result.rows.length) {
       return res.status(404).json({ error: 'Restaurant not found' });
     }

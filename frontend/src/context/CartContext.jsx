@@ -12,29 +12,38 @@ export const useCart = () => {
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(() => {
-    const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
+    try {
+      const saved = localStorage.getItem('cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      localStorage.removeItem('cart');
+      return [];
+    }
   });
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
 
-  const addToCart = (item) => {
+  const addToCart = (item, restaurantId) => {
+    const enriched = restaurantId
+      ? { ...item, restaurant_id: restaurantId }
+      : item;
+
     setCart((prevCart) => {
       const existingItem = prevCart.find(
-        (cartItem) => cartItem.id === item.id && cartItem.restaurant_id === item.restaurant_id
+        (cartItem) => cartItem.id === enriched.id && cartItem.restaurant_id === enriched.restaurant_id
       );
 
       if (existingItem) {
         return prevCart.map((cartItem) =>
-          cartItem.id === item.id && cartItem.restaurant_id === item.restaurant_id
+          cartItem.id === enriched.id && cartItem.restaurant_id === enriched.restaurant_id
             ? { ...cartItem, quantity: cartItem.quantity + 1 }
             : cartItem
         );
       }
 
-      return [...prevCart, { ...item, quantity: 1 }];
+      return [...prevCart, { ...enriched, quantity: 1 }];
     });
   };
 

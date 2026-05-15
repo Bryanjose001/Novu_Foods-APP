@@ -1047,8 +1047,6 @@ const AdminDashboard = () => {
         : storeForm.cuisineType,
     };
 
-    console.log('Submitting store form:', formToSend);
-
     try {
       if (editingStore) {
         await restaurantService.update(editingStore.id, formToSend);
@@ -1147,7 +1145,7 @@ const AdminDashboard = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('adminToken');
+    adminService.logout();
     setIsAuthenticated(false);
     navigate('/');
   };
@@ -1196,31 +1194,32 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-grey-full-light pb-24">
-      <div className="gradient-primary text-white p-6 pb-10">
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center space-x-3">
-            <Link to="/" className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors">
+      <div className="gradient-primary text-white px-4 sm:px-6 pt-5 pb-10">
+        {/* Top row */}
+        <div className="flex items-center justify-between mb-4 gap-2">
+          <div className="flex items-center gap-3 min-w-0">
+            <Link to="/" className="w-9 h-9 sm:w-10 sm:h-10 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors flex-shrink-0">
               <IconBack />
             </Link>
-
-            <div>
-              <h1 className="text-2xl font-extrabold">Admin Dashboard</h1>
-              <p className="text-sm opacity-75">Manage stores, menus & orders</p>
+            <div className="min-w-0">
+              <h1 className="text-lg sm:text-2xl font-extrabold leading-tight">Admin Dashboard</h1>
+              <p className="text-xs sm:text-sm opacity-75 hidden sm:block">Manage stores, menus & orders</p>
             </div>
           </div>
 
-          <div className="flex items-center space-x-2">
-            <span className="bg-white/20 px-3 py-1.5 rounded-full text-xs font-bold">
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            <span className="bg-white/20 px-2.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">
               {stores.length} Stores
             </span>
-            <span className="bg-white/20 px-3 py-1.5 rounded-full text-xs font-bold">
+            <span className="bg-white/20 px-2.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap">
               {orders.length} Orders
             </span>
           </div>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex space-x-2">
+        {/* Section tabs + logout */}
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex gap-2">
             {[
               { key: 'stores', label: 'Stores', icon: <IconStore /> },
               { key: 'orders', label: 'Orders', icon: <IconOrders /> },
@@ -1228,7 +1227,7 @@ const AdminDashboard = () => {
               <button
                 key={section.key}
                 onClick={() => setActiveSection(section.key)}
-                className={`flex items-center space-x-1.5 px-4 py-2 rounded-xl text-sm font-bold transition-all ${
+                className={`flex items-center gap-1.5 px-3 sm:px-4 py-2 rounded-xl text-sm font-bold transition-all ${
                   activeSection === section.key
                     ? 'bg-white text-primary shadow-md'
                     : 'bg-white/15 text-white hover:bg-white/25'
@@ -1242,14 +1241,14 @@ const AdminDashboard = () => {
 
           <button
             onClick={handleLogout}
-            className="text-xs font-bold text-white/80 hover:text-white bg-black/20 hover:bg-black/40 px-3 py-2 rounded-xl transition-colors"
+            className="text-xs font-bold text-white/80 hover:text-white bg-black/20 hover:bg-black/40 px-3 py-2 rounded-xl transition-colors whitespace-nowrap"
           >
             Logout
           </button>
         </div>
       </div>
 
-      <div className="px-4 -mt-4 relative z-10">
+      <div className="px-3 sm:px-4 md:px-6 -mt-4 relative z-10">
         {success && (
           <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-4 flex items-center justify-between shadow-sm">
             <span className="text-sm font-medium">{success}</span>
@@ -1270,8 +1269,8 @@ const AdminDashboard = () => {
 
         {activeSection === 'stores' && (
           <>
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-              <div className="flex space-x-2 overflow-x-auto no-scrollbar">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+              <div className="flex gap-2 overflow-x-auto no-scrollbar pb-1">
                 {storeTypes.map((type) => (
                   <button
                     key={type.key}
@@ -1668,37 +1667,37 @@ const AdminDashboard = () => {
                             </span>
                           </div>
 
-                          <div className="flex items-center space-x-2 mt-3">
+                          <div className="flex items-center gap-1.5 mt-3 flex-wrap">
                             <button
                               onClick={() => handleEditStore(store)}
-                              className="flex items-center space-x-1 text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-3 py-1.5 rounded-lg transition-colors"
+                              className="flex items-center gap-1 text-xs font-bold text-primary bg-primary/10 hover:bg-primary/20 px-2.5 py-1.5 rounded-lg transition-colors"
                             >
                               <IconEdit />
-                              <span>Edit</span>
+                              <span className="hidden sm:inline">Edit</span>
                             </button>
 
                             <button
                               onClick={() => setShowMenuForm(store.id)}
-                              className="flex items-center space-x-1 text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 px-3 py-1.5 rounded-lg transition-colors"
+                              className="flex items-center gap-1 text-xs font-bold text-green-700 bg-green-50 hover:bg-green-100 px-2.5 py-1.5 rounded-lg transition-colors"
                             >
                               <IconPlus />
-                              <span>Add Item</span>
+                              <span className="hidden sm:inline">Add Item</span>
                             </button>
 
                             <Link
                               to={`/restaurant/${store.id}`}
-                              className="flex items-center space-x-1 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors"
+                              className="flex items-center gap-1 text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1.5 rounded-lg transition-colors"
                             >
                               <IconEye />
-                              <span>View</span>
+                              <span className="hidden sm:inline">View</span>
                             </Link>
 
                             <button
                               onClick={() => handleDeleteStore(store)}
-                              className="flex items-center space-x-1 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-lg transition-colors ml-auto"
+                              className="flex items-center gap-1 text-xs font-bold text-red-600 bg-red-50 hover:bg-red-100 px-2.5 py-1.5 rounded-lg transition-colors ml-auto"
                             >
                               <IconTrash />
-                              <span>Delete</span>
+                              <span className="hidden sm:inline">Delete</span>
                             </button>
                           </div>
                         </div>
@@ -1780,12 +1779,10 @@ const AdminDashboard = () => {
 
                     <div className="flex items-center space-x-2">
                       <select
-                        value={order.status || 'pending'}
+                        value={order.status || 'preparing'}
                         onChange={(e) => handleUpdateOrderStatus(order, e.target.value)}
                         className="flex-1 text-xs font-semibold border border-grey-light-dark rounded-lg px-2 py-1.5 bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary/30"
                       >
-                        <option value="pending">Pending</option>
-                        <option value="confirmed">Confirmed</option>
                         <option value="preparing">Preparing</option>
                         <option value="on_the_way">On the Way</option>
                         <option value="delivered">Delivered</option>

@@ -1,173 +1,89 @@
-const pool = require('../config/database');
+const Order = require('../models/orderModel')
 
-// CREATE ORDER (with transaction)
-const createOrder = async (req, res) => {
-  const client = await pool.connect();
+const VALID_STATUSES = ['preparing', 'on_the_way', 'delivered', 'cancelled']
 
+const getAll = async (req, res) => {
   try {
-    await client.query('BEGIN');
+    const result = await Order.getAll()
+    res.json(result.rows)
+  } catch (err) {
+    console.error('Error fetching orders:', err)
+    res.status(500).json({ error: 'Failed to fetch orders' })
+  }
+}
 
-    const {
-      customerName,
-      customerEmail,
-      customerPhone,
-      deliveryAddress,
-      items,
-      totalAmount,
-    } = req.body;
+const getById = async (req, res) => {
+  try {
+    const order = await Order.getById(req.params.id)
+    if (!order) {
+      return res.status(404).json({ error: 'Order not found' })
+    }
+    res.json(order)
+  } catch (err) {
+    console.error('Error fetching order:', err)
+    res.status(500).json({ error: 'Failed to fetch order' })
+  }
+}
 
-    if (!customerName || !deliveryAddress || !items || items.length === 0) {
+const create = async (req, res) => {
+  const { customerName, deliveryAddress, items } = req.body
+
+  if (!customerName || !deliveryAddress || !Array.isArray(items) || items.length === 0) {
+    return res.status(400).json({
+      error: 'Missing required fields: customerName, deliveryAddress, and items are required',
+    })
+  }
+
+  for (const item of items) {
+    if (!item.name || item.quantity == null || item.price == null || !item.restaurantId) {
       return res.status(400).json({
-        error: 'Missing required fields',
-      });
+        error: 'Each item must have name, quantity, price, and restaurantId',
+      })
     }
-
-    const deliveryMinutes = Math.floor(Math.random() * 20) + 20;
-    const estimatedDelivery = `${deliveryMinutes}-${deliveryMinutes + 10} min`;
-
-    const orderResult = await client.query(
-      `INSERT INTO orders 
-      (customer_name, customer_email, customer_phone, delivery_address, total_amount, estimated_delivery, status)
-      VALUES ($1,$2,$3,$4,$5,$6,$7)
-      RETURNING *`,
-      [
-        customerName,
-        customerEmail,
-        customerPhone,
-        deliveryAddress,
-        totalAmount,
-        estimatedDelivery,
-        'preparing',
-      ]
-    );
-
-    const order = orderResult.rows[0];
-
-    for (const item of items) {
-      await client.query(
-        `INSERT INTO order_items 
-        (order_id, menu_item_id, restaurant_id, item_name, quantity, price)
-        VALUES ($1,$2,$3,$4,$5,$6)`,
-        [
-          order.id,
-          item.menuItemId,
-          item.restaurantId,
-          item.name,
-          item.quantity,
-          item.price,
-        ]
-      );
+    if (item.quantity < 1 || !Number.isFinite(Number(item.price)) || Number(item.price) < 0) {
+      return res.status(400).json({
+        error: 'Item quantity must be ≥ 1 and price must be a non-negative number',
+      })
     }
-
-    await client.query('COMMIT');
-
-    res.status(201).json(order);
-  } catch (error) {
-    await client.query('ROLLBACK');
-    console.error(error);
-    res.status(500).json({ error: 'Failed to create order' });
-  } finally {
-    client.release();
   }
-};
 
-// GET ONE ORDER
-const getOrderById = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    const orderResult = await pool.query(
-      'SELECT * FROM orders WHERE id = $1',
-      [id]
-    );
-
-    if (!orderResult.rows.length) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    const order = orderResult.rows[0];
-
-    const itemsResult = await pool.query(
-      `SELECT oi.*, r.name as restaurant_name
-       FROM order_items oi
-       LEFT JOIN restaurants r ON oi.restaurant_id = r.id
-       WHERE oi.order_id = $1`,
-      [id]
-    );
-
-    order.items = itemsResult.rows;
-
-    res.json(order);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch order' });
+    const order = await Order.create(req.body)
+    res.status(201).json(order)
+  } catch (err) {
+    console.error('Error creating order:', err)
+    res.status(500).json({ error: 'Failed to create order' })
   }
-};
+}
 
-// GET ALL ORDERS
-const getAllOrders = async (req, res) => {
+const updateStatus = async (req, res) => {
+  const { status } = req.body
+  if (!VALID_STATUSES.includes(status)) {
+    return res.status(400).json({ error: 'Invalid status' })
+  }
   try {
-    const result = await pool.query(
-      'SELECT * FROM orders ORDER BY created_at DESC LIMIT 50'
-    );
-
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch orders' });
-  }
-};
-
-// UPDATE STATUS
-const updateOrderStatus = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { status } = req.body;
-
-    const validStatuses = [
-      'preparing',
-      'on_the_way',
-      'delivered',
-      'cancelled',
-    ];
-
-    if (!validStatuses.includes(status)) {
-      return res.status(400).json({ error: 'Invalid status' });
+    const result = await Order.updateStatus(req.params.id, status)
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Order not found' })
     }
-
-    const result = await pool.query(
-      `UPDATE orders 
-       SET status = $1, updated_at = CURRENT_TIMESTAMP 
-       WHERE id = $2 
-       RETURNING *`,
-      [status, id]
-    );
-
-    if (!result.rows.length) {
-      return res.status(404).json({ error: 'Order not found' });
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to update order status' });
+    res.json(result.rows[0])
+  } catch (err) {
+    console.error('Error updating order status:', err)
+    res.status(500).json({ error: 'Failed to update order status' })
   }
-};
+}
 
-// DELETE ORDER
-const deleteOrder = async (req, res) => {
+const remove = async (req, res) => {
   try {
-    const { id } = req.params;
-
-    await pool.query('DELETE FROM orders WHERE id = $1', [id]);
-
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to delete order' });
+    const result = await Order.remove(req.params.id)
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'Order not found' })
+    }
+    res.json({ message: 'Order deleted successfully', order: result.rows[0] })
+  } catch (err) {
+    console.error('Error deleting order:', err)
+    res.status(500).json({ error: 'Failed to delete order' })
   }
-};
+}
 
-module.exports = {
-  createOrder,
-  getOrderById,
-  getAllOrders,
-  updateOrderStatus,
-  deleteOrder,
-};
+module.exports = { getAll, getById, create, updateStatus, remove }

@@ -8,8 +8,6 @@ const Navbar = () => {
   const { getCartCount } = useCart();
   const { user, logout } = useAuth();
   const cartCount = getCartCount();
-<<<<<<< HEAD
-=======
   const navigate = useNavigate();
   const location = useLocation();
   const [query, setQuery] = useState('');
@@ -68,8 +66,6 @@ const Navbar = () => {
           <div className="relative w-full flex items-center">
             <input
               type="text"
-<<<<<<< HEAD
-=======
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}

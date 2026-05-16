@@ -18,8 +18,6 @@ import OrderTracking from './pages/OrderTracking';
 import RestaurantSignUp from './pages/RestaurantSignUp';
 import AdminDashboard from './pages/AdminDashboard';
 import CategoryPage from './pages/CategoryPage';
-<<<<<<< HEAD
-=======
 import SearchResults from './pages/SearchResults';
 import Favorites from './pages/Favorites';
 import Profile from './pages/Profile';

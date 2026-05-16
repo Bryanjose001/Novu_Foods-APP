@@ -1,26 +1,3 @@
-<<<<<<< HEAD
-const express = require('express');
-const router = express.Router();
-
-const {
-  getMenuByRestaurant,
-  getMenuItemById,
-  createMenuItem,
-  deleteMenuItem,
-} = require('../controllers/menuController');
-
-//const { requireAdmin } = require('../middleware/authMiddleware');
-
-// Public routes
-router.get('/restaurant/:id', getMenuByRestaurant);
-router.get('/:id', getMenuItemById);
-
-// Admin routes
-//router.post('/', requireAdmin, createMenuItem);
-//router.delete('/:id', requireAdmin, deleteMenuItem);
-
-module.exports = router;
-=======
 const express = require('express')
 const router = express.Router()
 const menuController = require('../controllers/menuController')
@@ -32,4 +9,3 @@ router.put('/:id', requireAdmin, menuController.update)
 router.delete('/:id', requireAdmin, menuController.remove)
 
 module.exports = router
->>>>>>> recover-my-work
